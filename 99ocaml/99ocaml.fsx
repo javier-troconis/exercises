@@ -113,6 +113,17 @@ let encode_no_backtracking l =
             if x1 = x2 then encode_no_backtracking r (c+1) xs2 else encode_no_backtracking ((c+1, x1)::r) 0 xs2
     encode_no_backtracking [] 0 l |> List.rev
 
+//12
+type 't thing =
+    One of 't
+    | Many of int * 't
+
+let rec decode = function
+    [] -> []
+    | One x::xs -> x::decode xs
+    | Many (c,x)::xs -> if c > 2 then x :: decode (Many (c-1,x)::xs) else x::x::decode xs
+
+decode [Many (4,"a"); One "b"; Many (2,"c"); Many (2,"a"); One "d"; Many (4,"e")];;
 
 
 //57
