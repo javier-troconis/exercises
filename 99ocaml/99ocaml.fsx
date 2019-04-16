@@ -105,3 +105,30 @@ let rec encode = function
 
 encode ["a";"a";"a";"a";"b";"c";"c";"a";"a";"d";"e";"e";"e";"e"]
 
+let encode_no_backtracking l = 
+    let rec encode_no_backtracking r c = function
+        [] -> r
+        | [x] -> (c+1, x) :: r
+        | x1::(x2::_ as xs2) -> 
+            if x1 = x2 then encode_no_backtracking r (c+1) xs2 else encode_no_backtracking ((c+1, x1)::r) 0 xs2
+    encode_no_backtracking [] 0 l |> List.rev
+
+
+
+//57
+type 't binary_tree =
+    Empty
+    | Node of ('t * 't binary_tree * 't binary_tree) 
+
+let rec insert n v = 
+    match n with
+        Empty -> Node (v, Empty, Empty)
+        | Node(nv, l, r) -> 
+            if nv > v then Node (nv, (insert l v), r) 
+            else if v > nv then Node (nv, l, (insert r v)) 
+            else n
+
+let construct l = List.fold insert Empty l
+
+construct [3;2;5;7;1]
+
