@@ -1,0 +1,385 @@
+
+<!-- saved from url=(0107)http://webcache.googleusercontent.com/search?q=cache:http://infolab.stanford.edu/~ullman/emlpsols/sol3.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><!--<base href="http://infolab.stanford.edu/~ullman/emlpsols/sol3.html">--><base href="."><style>body{margin-left:0;margin-right:0;margin-top:0}#bN015htcoyT__google-cache-hdr{background:#f5f5f5;font:13px arial,sans-serif;text-align:left;color:#202020;border:0;margin:0;border-bottom:1px solid #cecece;line-height:16px;padding:16px 28px 24px 28px}#bN015htcoyT__google-cache-hdr *{display:inline;font:inherit;text-align:inherit;color:inherit;line-height:inherit;background:none;border:0;margin:0;padding:0;letter-spacing:0}#bN015htcoyT__google-cache-hdr a{text-decoration:none;color:#1a0dab}#bN015htcoyT__google-cache-hdr a:hover{text-decoration:underline}#bN015htcoyT__google-cache-hdr a:visited{color:#609}#bN015htcoyT__google-cache-hdr div{display:block;margin-top:4px}#bN015htcoyT__google-cache-hdr b{font-weight:bold;display:inline-block;direction:ltr}</style></head><body bgcolor="E0F7F0"><div id="bN015htcoyT__google-cache-hdr"><div><span>This is Google's cache of <a href="http://infolab.stanford.edu/~ullman/emlpsols/sol3.html">http://infolab.stanford.edu/~ullman/emlpsols/sol3.html</a>.</span>&nbsp;<span>It is a snapshot of the page as it appeared on Aug 29, 2018 13:43:54 GMT.</span>&nbsp;<span>The <a href="http://infolab.stanford.edu/~ullman/emlpsols/sol3.html">current page</a> could have changed in the meantime.</span>&nbsp;<a href="http://support.google.com/websearch/bin/answer.py?hl=en&amp;p=cached&amp;answer=1687222"><span>Learn more</span>.</a></div><div><span style="display:inline-block;margin-top:8px;margin-right:104px;white-space:nowrap"><span style="margin-right:28px"><span style="font-weight:bold">Full version</span></span><span style="margin-right:28px"><a href="http://webcache.googleusercontent.com/search?q=cache:http://infolab.stanford.edu/~ullman/emlpsols/sol3.html&amp;num=1&amp;strip=1&amp;vwsrc=0"><span>Text-only version</span></a></span><span style="margin-right:28px"><a href="http://webcache.googleusercontent.com/search?q=cache:http://infolab.stanford.edu/~ullman/emlpsols/sol3.html&amp;num=1&amp;strip=0&amp;vwsrc=1"><span>View source</span></a></span></span></div><span style="display:inline-block;margin-top:8px;color:#717171"><span>Tip: To quickly find your search term on this page, press <b>Ctrl+F</b> or <b>⌘-F</b> (Mac) and use the find bar.</span></span></div><div style="position:relative;">
+<title>Elements of ML Programming, Second Edition (ML97):
+Solutions for Chapter 3</title>
+
+
+
+
+<center><table>
+<tbody><tr><td><img src="http://infolab.stanford.edu/~ullman/emlpsols/gifs/eng.arms.mini.GIF">
+</td><td nowrap="" align="MIDDLE"><font size="6">Elements of ML Programming, 2nd
+Edition (ML97)</font>
+</td></tr></tbody></table></center>
+
+<a name="top"></a>
+<h2>Solutions for Chapter 3</h2>
+
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol3.html#sol31">Solutions for Section 3.1</a><p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol3.html#sol32">Solutions for Section 3.2</a></p><p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol3.html#sol33">Solutions for Section 3.3</a></p><p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol3.html#sol34">Solutions for Section 3.4</a></p><p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol3.html#sol35">Solutions for Section 3.5</a></p><p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol3.html#sol36">Solutions for Section 3.6</a></p><p>
+
+<a name="sol31"></a>
+</p><h2>Solutions for Section 3.1</h2>
+
+Revised 3/17/05.
+
+<h3>Exercise 3.1.1(a)</h3>
+
+<pre>     fun cube(x:real) = x*x*x;
+</pre>
+
+<h3>Exercise 3.1.1(c)</h3>
+
+<pre>     fun third(L) = hd(tl(tl(L)));
+</pre>
+
+<h3>Exercise 3.1.1(e)</h3>
+
+<pre>     fun thirdChar(s) = third(explode(s));
+</pre>
+
+<h3>Exercise 3.1.2(a)</h3>
+
+<pre>     fun minMax(a,b,c) =
+         if a&lt;b then
+             if b&lt;c then (a,c)
+             else (* b is largest *)
+                 if a&lt;c then (a,b) else (c,b)
+         else (* a &gt;= b *)
+             if a&lt;c then (b,c)
+             else (* a is largest *)
+                 if b&lt;c then (b,a) else (c,a);
+</pre>
+
+<h3>Exercise 3.1.3(a)</h3>
+<tt>f</tt> multiplies its argument by 2, so the result is 8.
+
+<h3>Exercise 3.1.3(b)</h3>
+The value of <tt>f(4)</tt> is still 8, and the previous definition of
+<tt>b</tt> was 3, so the result is 11.
+Note that the <tt>b</tt> referred to in the expression <tt>f(4)+b</tt>
+cannot be the <tt>b</tt> that is the parameter of <tt>f</tt>, because
+the latter is only accessible within the definition of <tt>f</tt>.
+
+<h3>Exercise 3.1.3(e)</h3>
+<tt>g(6) = 6+3</tt>, so we must compute <tt>f(9)</tt>, or 18.
+<p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol3.html#top">Return to Top</a>
+</p><p>
+
+<a name="sol32"></a>
+</p><h2>Solutions for Section 3.2</h2>
+
+<h3>Exercise 3.2.1(a)</h3>
+
+<pre>     fun fact(n) =
+             if n&lt;=1 then 1 else n*fact(n-1);
+</pre>
+
+<h3>Exercise 3.2.1(c)</h3>
+
+<pre>     fun duplicate(L) =
+             if L=nil then nil else hd(L)::hd(L)::duplicate(tl(L));
+</pre>
+
+<h3>Exercise 3.2.1(f)</h3>
+
+<b>Note</b>:
+Because real is not an equality type, and the function <tt>null</tt> to
+test whether a list is empty even if the list is not of an equality
+type is not introduced in Chapter 3, I have changed Exercise 3.2.1(f) to
+ask for the maximum of a list of strings instead, and the code below
+reflects that change.
+If you want to make the code work for lists of reals, you have to
+replace <tt>tl(L)=nil</tt> in the second line by <tt>null(tl(L))</tt>,
+and of course change the type declaration on line (1).
+
+<pre>fun maxList(L: string list) =
+	if tl(L)=nil (* L is a single element *)
+		then hd(L) (* the single element is the maximum *)
+		else (* assume there are at least 2 elements *)
+			if hd(L)&gt;hd(tl(L)) (* the first element
+					exceeds the second *)
+				then maxList(hd(L)::tl(tl(L))) (* eliminate
+						second element *)
+				else maxList(tl(L)) (* eliminate first
+						element *);
+</pre>
+
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/code/ex324.txt">Download this program</a><p>
+
+There are considerably simpler ways to solve this problem if we use the
+let-construct described in Section 3.4.
+
+</p><h3>Exercise 3.2.2</h3>
+
+In the second line we have expression c+1.
+Since 1 is an integer, c must also be an integer.
+In the third line, the expressions following the <tt>then</tt> and
+<tt>else</tt> must be of the same type.
+One of these is c, so the type of both is integer.
+Thus, expression b+d is of integer type.
+Therefore b and
+d must also be integers.
+Finally, since a and b are compared on lines 2 and 3, they must be
+of the same type.
+Hence a is also an integer.
+
+<h3>Exercise 3.2.3(a)</h3>
+
+Since a is compared with b+c, the latter sum must be an integer.
+Therefore both b and c must be integers.
+We cannot tell what types d and e have, although they must be of the
+same type.
+
+<h3>Exercise 3.2.3(c)</h3>
+
+Since a is compared with b, b must be an integer.
+Therefore, the sum b+c is an integer, and so is c.
+Also, d+e must have the same type as b+c, so both d and e are integers
+as well.
+
+<h3>Exercise 3.2.2(f)</h3>
+
+Since there is no way to infer a type for b or c
+without using the default rules, the default applies to
+operator &lt;.
+Thus, b and c are both inferred to be integers.
+We still cannot infer types for d or e.
+However, since they are each the result in one branch of the
+if-then-else, their types must be the same.
+<p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol3.html#top">Return to Top</a>
+</p><p>
+
+<a name="sol33"></a>
+</p><h2>Solutions for Section 3.3</h2>
+
+<h3>Exercise 3.3.1(a)</h3>
+
+<pre>     fun fact(1) = 1
+     |   fact(n) = n*fact(n-1);
+</pre>
+
+<h3>Exercise 3.3.1(d)</h3>
+
+<pre>     fun duplicate(nil) = nil
+     |   duplicate(x::xs) = x::x::duplicate(xs);
+</pre>
+
+<h3>Exercise 3.3.1(f)</h3>
+
+<pre>     fun maxList([x:real]) = x
+     |   maxList(x::y::zs) =
+             if x&lt;y then maxList(y::zs)
+             else maxList(x::zs);
+</pre>
+
+<h3>Exercise 3.3.5(a)</h3>
+
+Yes; <tt>x="a"</tt>, <tt>y="b"</tt>, <tt>zs=["c"]</tt>, and <tt>w=["d","e"]</tt>.
+
+<h3>Exercise 3.3.5(c)</h3>
+
+No; the expression <tt>y::zs</tt> in the pattern is forced to match
+<tt>nil</tt> in the expression.
+We fail, since constant symbols <tt>::</tt> and <tt>nil</tt> cannot be matched.
+Put another way, the first component of the pair has to be a list of
+length at least 2 in order to match the pattern <tt>x::y::zs</tt>.
+
+<h3>Exercise 3.3.7</h3>
+
+<pre>     fun square(0) = 0
+     |   square(n) = square(n-1)+2*n-1;
+</pre>
+
+<h3>Exercise 3.3.8</h3>
+
+<pre>     fun flip(nil) = nil
+     |   flip((x as (a:int,b))::xs) =
+             if a&lt;b then x::flip(xs) else (b,a)::flip(xs);
+</pre>
+
+<h3>Exercise 3.3.11(a)</h3>
+
+We first check to see whether the set <i>S</i> is empty, that is, whether the list is
+<tt>nil</tt>.
+If so, <i>x</i> is not in <i>S</i>.
+If not, then we compare <i>x</i> with the head of the list.
+If the head equals <i>x</i>, then <i>x</i> is in <i>S</i>.
+Otherwise, we recursively test whether <i>x</i> is in the tail of the list.
+
+<pre>     fun member(_,nil) = false
+     |   member(x,y::ys) =
+             (x=y orelse member(x,ys));
+</pre>
+
+We might be tempted to replace the second line by
+
+<pre>     |   member(x,x::xs) = true
+     |   member(x,_::xs) = member(x,xs);
+</pre>
+
+However, it is not permitted to use an identifier like <tt>x</tt> twice in
+one pattern.
+
+<h3>Exercise 3.3.11(c)</h3>
+
+<pre>     fun insert(x,nil) = [x]
+     |   insert(x,S as y::ys) =
+             if x=y then S else y::insert(x,ys);
+</pre>
+
+<h3>Exercise 3.3.12</h3>
+
+<pre>     fun insertAll(a,nil) = nil
+     |   insertAll(a,L::Ls) = (a::L)::insertAll(a,Ls);
+</pre>
+
+The idea behind the second line is that we put <i>a</i> on the front of
+the first list, and then in the recursive call put <i>a</i> on the front
+of the remaining lists.
+
+<h3>Exercise 3.3.13</h3>
+
+<pre>     fun powerSet(nil) = [nil]
+     |   powerSet(x::xs) =
+             powerSet(xs)@insertAll(x,powerSet(xs));
+</pre>
+
+The function above computes the power set as follows.
+For a basis, the power set of the empty set is the set containing the
+empty set.
+The latter is represented by the list <tt>[nil]</tt>, as in the first line
+of function <tt>powerSet</tt> above.
+If the given list is not empty, we take the first element <i>x</i>,
+compute the power set of the remaining elements, and concatenate this
+list with the list of all sets with <i>x</i> added.
+Thus, all the sets that have <i>x</i> and those that do not are included in
+the overall list.
+Incidentally, there is a better way to write this function that does not
+require us to compute <tt>powerSet(xs)</tt> twice.
+However, we do not discuss the needed
+construct, the ``let''-expression, until Section 3.4.
+
+<h3>Exercise 3.3.14</h3>
+
+<pre>     fun prodDiff1(_,nil) = 1.0
+     |   prodDiff1(a,b::bs) = (a-b)*prodDiff1(a,bs);
+
+     fun prodDiff(nil) = 1.0
+     |   prodDiff(b::bs) = prodDiff1(b,bs)*prodDiff(bs);
+</pre>
+
+<h3>Exercise 3.3.15</h3>
+
+<pre>     fun emptyList(nil) = true
+     |   emptyList(_) = false;
+</pre>
+<p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol3.html#top">Return to Top</a>
+</p><p>
+
+<a name="sol34"></a>
+</p><h2>Solutions for Section 3.4</h2>
+
+<h3>Exercise 3.4.1</h3>
+
+The function below is about as succinct as can be managed.
+
+<pre>     fun thousandthPower(x:real) =
+             let
+                 val x = x*x*x*x*x;
+                 val x = x*x*x*x*x;
+                 val x = x*x*x*x*x
+             in
+                 x*x*x*x*x*x*x*x
+             end;
+</pre>
+
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/code/ex341.txt">Download this program</a><p>
+
+</p><h3>Exercise 3.4.3</h3>
+
+The following code uses
+<tt>insertAll</tt> from Exercise 3.3.12.
+
+<pre>     fun powerSet(nil) = [nil]
+     |   powerSet(x::xs) =
+             let
+                 val L = powerSet(xs)
+             in
+                 L @ insertAll(x,L)
+             end;
+</pre>
+
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/code/ex343.txt">Download the complete program</a><p>
+
+</p><h3>Exercise 3.4.5</h3>
+
+<pre>     fun doubleExp(x:real,0) = x
+     |   doubleExp(x,i) =
+             let
+                 val y = doubleExp(x,i-1)
+             in
+                 y*y
+             end;
+</pre>
+
+Note that we could have written the recursive case simply as
+
+<pre>     |   doubleExp(x,i) = doubleExp(x,i-1) * doubleExp(x,i-1);
+</pre>
+
+However, it would take considerably more time to compute the function
+this way, as computations would then be repeated an exponential number
+of times.
+<p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol3.html#top">Return to Top</a>
+</p><p>
+
+<a name="sol35"></a>
+</p><h2>Solutions for Section 3.5</h2>
+
+<h3>Exercise 3.5.1</h3>
+
+<pre>     fun cat(nil,M) = M
+     |   cat(x::xs,M) = x::cat(xs,M);
+</pre>
+
+That is, we recursively put the tail of <i>L</i> in front of <i>M</i>,
+and finally put the head of <i>L</i> in front of all, using the cons
+operator.
+<p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol3.html#top">Return to Top</a>
+</p><p>
+
+<a name="sol36"></a>
+</p><h2>Solutions for Section 3.6</h2>
+
+<h3>Exercise 3.6.4</h3>
+
+If the list of roots is empty, the polynomial 1, represented by the list
+<tt>[1.0]</tt>, is appropriate.
+If the list is not empty, then let <i>p</i> be the first root.
+We may recursively construct the polynomial for the rest of the roots
+and multiply it by <i>x-p</i>, or in list representation
+<tt>[~p,1.0]</tt>.
+The following lines implement this idea.
+
+<pre>     fun polyFromRoots(nil) = [1.0]
+     |   polyFromRoots(p::ps) =
+             pmult([~p,1.0],polyFromRoots(ps));
+</pre>
+<p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol3.html#top">Return to Top</a>
+</p><p>
+
+
+
+</p></div></body></html>

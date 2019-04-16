@@ -1,0 +1,328 @@
+
+<!-- saved from url=(0107)http://webcache.googleusercontent.com/search?q=cache:http://infolab.stanford.edu/~ullman/emlpsols/sol9.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><!--<base href="http://infolab.stanford.edu/~ullman/emlpsols/sol9.html">--><base href="."><style>body{margin-left:0;margin-right:0;margin-top:0}#bN015htcoyT__google-cache-hdr{background:#f5f5f5;font:13px arial,sans-serif;text-align:left;color:#202020;border:0;margin:0;border-bottom:1px solid #cecece;line-height:16px;padding:16px 28px 24px 28px}#bN015htcoyT__google-cache-hdr *{display:inline;font:inherit;text-align:inherit;color:inherit;line-height:inherit;background:none;border:0;margin:0;padding:0;letter-spacing:0}#bN015htcoyT__google-cache-hdr a{text-decoration:none;color:#1a0dab}#bN015htcoyT__google-cache-hdr a:hover{text-decoration:underline}#bN015htcoyT__google-cache-hdr a:visited{color:#609}#bN015htcoyT__google-cache-hdr div{display:block;margin-top:4px}#bN015htcoyT__google-cache-hdr b{font-weight:bold;display:inline-block;direction:ltr}</style></head><body bgcolor="E0F7F0"><div id="bN015htcoyT__google-cache-hdr"><div><span>This is Google's cache of <a href="http://infolab.stanford.edu/~ullman/emlpsols/sol9.html">http://infolab.stanford.edu/~ullman/emlpsols/sol9.html</a>.</span>&nbsp;<span>It is a snapshot of the page as it appeared on Jul 3, 2018 07:43:48 GMT.</span>&nbsp;<span>The <a href="http://infolab.stanford.edu/~ullman/emlpsols/sol9.html">current page</a> could have changed in the meantime.</span>&nbsp;<a href="http://support.google.com/websearch/bin/answer.py?hl=en&amp;p=cached&amp;answer=1687222"><span>Learn more</span>.</a></div><div><span style="display:inline-block;margin-top:8px;margin-right:104px;white-space:nowrap"><span style="margin-right:28px"><span style="font-weight:bold">Full version</span></span><span style="margin-right:28px"><a href="http://webcache.googleusercontent.com/search?q=cache:http://infolab.stanford.edu/~ullman/emlpsols/sol9.html&amp;num=1&amp;strip=1&amp;vwsrc=0"><span>Text-only version</span></a></span><span style="margin-right:28px"><a href="http://webcache.googleusercontent.com/search?q=cache:http://infolab.stanford.edu/~ullman/emlpsols/sol9.html&amp;num=1&amp;strip=0&amp;vwsrc=1"><span>View source</span></a></span></span></div><span style="display:inline-block;margin-top:8px;color:#717171"><span>Tip: To quickly find your search term on this page, press <b>Ctrl+F</b> or <b>⌘-F</b> (Mac) and use the find bar.</span></span></div><div style="position:relative;">
+<title>Elements of ML Programming, Second Edition (ML97):
+Solutions for Chapter 9</title>
+
+
+
+
+<center><table>
+<tbody><tr><td><img src="http://infolab.stanford.edu/~ullman/emlpsols/gifs/eng.arms.mini.GIF">
+</td><td nowrap="" align="MIDDLE"><font size="6">Elements of ML Programming, 2nd
+Edition (ML97)</font>
+</td></tr></tbody></table></center>
+
+<a name="top"></a>
+<h2>Solutions for Chapter 9</h2>
+
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol9.html#sol91">Solutions for Section 9.1</a><p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol9.html#sol92">Solutions for Section 9.2</a></p><p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol9.html#sol93">Solutions for Section 9.3</a></p><p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol9.html#sol94">Solutions for Section 9.4</a></p><p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol9.html#sol95">Solutions for Section 9.5</a></p><p>
+
+<a name="sol91"></a>
+</p><h2>Solutions for Section 9.1</h2>
+
+<h3>Exercise 9.1.1(a)</h3>
+
+Yes.
+Leaves 2 and 3 would be grouped first, and the tree printed would be
+(1,(2,3)).
+
+<h3>Exercise 9.1.2(a)</h3>
+
+Give both the same precedence and make them left-associative.
+For example,
+
+
+<pre>     infix 6 +;
+     infix 6 *;
+</pre>
+
+<h3>Exercise 9.1.3</h3>
+
+We need to keep the precedences of the polynomial operators below 6,
+which is the precedence of the additive arithmetic operators.
+Thus, we could use something like
+
+<pre>     infix 2 padd;
+     infix 3 pmult;
+     infix 4 smult;
+</pre>
+
+Here is an answer to part (b), where we compute <i>(P+2Q)*R</i>.
+
+<pre>([~6.0,0.0,5.0,0.0,3.0] padd 2.0 smult [4.0,~3.0,2.0,1.0]) pmult [1.0,1.0]
+</pre>
+
+<h3>Exercise 9.1.5(a)</h3>
+
+<pre>     fun sumLeaves(x:real) = x
+     |   sumLeaves(T1 t T2) = sumLeaves(T1) + sumLeaves(T2);
+</pre>
+<p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol9.html#top">Return to Top</a>
+</p><p>
+
+<a name="sol92"></a>
+</p><h2>Solutions for Section 9.2</h2>
+
+<h3>Exercise 9.2.1</h3>
+
+<pre>     (x + abs(x))/2.0;
+</pre>
+
+When <i>x</i> is positive, the above expression is just <i>2x/2 = x</i>.
+However, when <i>x</i> is negative, the numerator is 0.
+
+<h3>Exercise 9.2.2</h3>
+
+It's not possible.
+The problem is that the given expresion is not continuous; it jumps from
+0 to over 3 as <i>x</i> moves from 3 to 3+epsilon.
+However, all the given functions, <tt>abs</tt> and the arithmetic
+operators, <em>are</em> continuous, and therefore so will be any
+expression made from them, except at points where the constructed
+expression is undefined or infinite (of which the given expression has
+none, so the constructed expression could not have).
+
+<h3>Exercise 9.2.3(a)</h3>
+
+<tt>"23"</tt>.
+
+<h3>Exercise 9.2.3(d)</h3>
+
+<tt>"abc"</tt>.
+
+<h3>Exercise 9.2.3(e)</h3>
+
+<tt>"abc"</tt>.
+
+<h3>Exercise 9.2.6(a)</h3>
+
+<pre>     fun addToRef(r,x) = ignore(r := !r + x);
+</pre>
+
+<h3>Exercise 9.2.8(a)</h3>
+
+<pre>     fun isSome(NONE) = false
+     |   isSome(SOME x) = true;
+</pre>
+
+<h3>Exercise 9.2.8(c)</h3>
+
+<pre>     fun getOpt(NONE,x) = x
+     |   getOpt(SOME y, _) = y;
+</pre>
+
+<h3>Exercise 9.2.8(e)</h3>
+
+<pre>     fun ignore x = (x; ());
+</pre>
+
+<h3>Exercise 9.2.8(g)</h3>
+
+<pre>     fun app f L = ignore(map f L);
+</pre>
+
+Notice the difference:<p>
+
+<tt>app print ["ab", "cd"];</tt><br>
+<em>abcdval it = () : unit</em><br>
+<tt>map print ["ab", "cd"];</tt><br>
+<em>abcdval it = [(),()] : unit list</em><br>
+</p><p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol9.html#top">Return to Top</a>
+</p><p>
+
+<a name="sol93"></a>
+</p><h2>Solutions for Section 9.3</h2>
+
+<h3>Exercise 9.3.1</h3>
+
+<pre>     fun compare(nil,nil) = EQUAL
+     |   compare(nil,_) = LESS
+     |   compare(_,nil) = GREATER
+     |   compare(x::xs,y::ys) =
+             if x&lt;y then LESS
+             else if x&gt;y then GREATER
+             else compare(xs,ys);
+</pre>
+
+Notice that the function <tt>compare</tt> works only on integer lists,
+because integer is the default type for &lt;.<p>
+
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/code/ex931.txt">Download this program</a></p><p>
+</p><p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol9.html#top">Return to Top</a>
+</p><p>
+
+<a name="sol94"></a>
+</p><h2>Solutions for Section 9.4</h2>
+
+<h3>Exercise 9.4.1(a,b)</h3>
+
+The quotient is 2 and the remainder is -4.
+However, there is an error in the text because in SML/NJ version 109.30,
+<tt>quot</tt> and <tt>rem</tt> are prefix operators, i.e., functions.
+Thus, the correct expressions are <tt>quot(~14,~5)</tt> and
+<tt>rem(~14,~5)</tt>.
+The same applies to parts (c) and (d) of this exercise.
+
+<h3>Exercise 9.4.2(a)</h3>
+
+<pre>     x * sign(x)
+</pre>
+
+When <i>x</i> is positive, <tt>sign(x)</tt> is 1, so the result is
+<i>x</i>.
+When <i>x</i> is negative, <tt>sign(x)</tt> is -1, so the result is
+<i>-x</i>, i.e., <tt>abs(x)</tt>.
+When <i>x</i> is 0, then <tt>sign(x)</tt> is also 0, and the expression
+is surely 0.
+
+<h3>Exercise 9.4.3(a)</h3>
+
+2748.
+
+<h3>Exercise 9.4.3(c)</h3>
+
+<pre>~1073741821
+</pre>
+
+<h3>Exercise 9.4.3(e)</h3>
+
+<pre>0wx1F
+</pre>
+
+<h3>Exercise 9.4.3(g)</h3>
+
+<pre>0wx4
+</pre>
+
+<h3>Exercise 9.4.6(a)</h3>
+
+<pre>     fun isVowel c = Char.contains "aeiou" c;
+</pre>
+
+<h3>Exercise 9.4.7(a)</h3>
+
+In the following, we assume the only whitespace characters are
+blank, tab, and
+newline.
+
+<pre>     val f = String.tokens(fn x =&gt; x = #" " orelse x = #"\n" orelse x = #"\t");
+</pre>
+
+<h3>Exercise 9.4.8</h3>
+
+<pre>     fun rev1 ss =
+         case Substring.getc ss of
+             NONE =&gt; "" |
+             SOME (c,ss1) =&gt; rev1 ss1 ^ str c;
+
+     fun revString s = rev1(Substring.substring(s,0,size s));
+</pre>
+
+The work is done by the function <tt>rev1</tt>, which uses <tt>getc</tt>
+to break a substring into a first character and a subsequent
+characters.
+If the substring is empty, we return the empty string (not substring).
+If the string has a first character, we recursively reverse the
+substring consisting of the remaining characters, receiving a string as
+the result.
+Finally, we concatenate the first character to the end of the result
+string.<p>
+
+Then, since we are given a string initially, we need function
+<tt>revString</tt> to convert the string to an equivalent substring and
+call <tt>rev1</tt> on this substring.
+Notice that we get the complete string as a substring by taking the
+second argument of <tt>Substring.substring</tt>
+to be 0 and the third argument to be the length of the string.</p><p>
+
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/code/ex948.txt">Download this program</a></p><p>
+
+</p><h3>Exercise 9.4.9(a)</h3>
+
+<pre>[0,1,4,9]
+</pre>
+
+<h3>Exercise 9.4.9(c)</h3>
+
+1.
+
+<h3>Exercise 9.4.10(b)</h3>
+
+<pre>     fun threeWay(L) =
+             let
+                  val (L0,M) = List.partition (fn x =&gt; x mod 3 = 0) L;
+                  val (L1,L2) = List.partition (fn x =&gt; x mod 3 = 1) M
+             in
+                  (L0,L1,L2)
+             end;
+</pre>
+
+Here, L0, L1, and L2 are the lists of integers that have remainders 0,
+1, and 2, respectively, when divided by 3.
+
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/code/ex9410.txt">Download this program</a><p>
+
+</p><h3>Exercise 9.4.11(a)</h3>
+
+<pre>     fun chArray() = Array.tabulate(26, (fn x =&gt; chr(x+ord #"a")));
+</pre>
+
+<h3>Exercise 9.4.12(a)</h3>
+
+<pre>     #[1,4,9,16,25]
+</pre>
+
+<h3>Exercise 9.4.14(a)</h3>
+
+<pre>     TIME {sec=1, usec=234000}
+</pre>
+
+<h3>Exercise 9.4.14(c)</h3>
+
+3.002.
+<p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol9.html#top">Return to Top</a>
+</p><p>
+
+<a name="sol95"></a>
+</p><h2>Solutions for Section 9.5</h2>
+
+<h3>Exercise 9.5.2</h3>
+
+The following function takes a list of strings, converts them to
+integers, and sums those integers.
+
+<pre>     fun sum1 nil = 0
+     |   sum1(x::xs) = valOf(Int.fromString x) + sum1 x;
+</pre>
+
+Then, the following function
+calls <tt>sum1</tt>
+on its second argument, ignoring the first, and prints the result.
+
+<pre>     fun sum(_,L) = print(Int.toString(sum1 L));
+</pre>
+
+The first argument is there because of the form of function
+<tt>exportFn</tt> expects; it is the name of the file containing the
+program being exported.<p>
+
+Finally, we export the function <tt>sum</tt> into a file <tt>foo</tt>:
+
+</p><pre>     exportFn("foo",sum);
+</pre>
+<p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol9.html#top">Return to Top</a>
+</p><p>
+
+
+
+</p></div></body></html>

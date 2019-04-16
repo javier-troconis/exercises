@@ -1,0 +1,291 @@
+
+<!-- saved from url=(0107)http://webcache.googleusercontent.com/search?q=cache:http://infolab.stanford.edu/~ullman/emlpsols/sol6.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><!--<base href="http://infolab.stanford.edu/~ullman/emlpsols/sol6.html">--><base href="."><style>body{margin-left:0;margin-right:0;margin-top:0}#bN015htcoyT__google-cache-hdr{background:#f5f5f5;font:13px arial,sans-serif;text-align:left;color:#202020;border:0;margin:0;border-bottom:1px solid #cecece;line-height:16px;padding:16px 28px 24px 28px}#bN015htcoyT__google-cache-hdr *{display:inline;font:inherit;text-align:inherit;color:inherit;line-height:inherit;background:none;border:0;margin:0;padding:0;letter-spacing:0}#bN015htcoyT__google-cache-hdr a{text-decoration:none;color:#1a0dab}#bN015htcoyT__google-cache-hdr a:hover{text-decoration:underline}#bN015htcoyT__google-cache-hdr a:visited{color:#609}#bN015htcoyT__google-cache-hdr div{display:block;margin-top:4px}#bN015htcoyT__google-cache-hdr b{font-weight:bold;display:inline-block;direction:ltr}</style></head><body bgcolor="E0F7F0"><div id="bN015htcoyT__google-cache-hdr"><div><span>This is Google's cache of <a href="http://infolab.stanford.edu/~ullman/emlpsols/sol6.html">http://infolab.stanford.edu/~ullman/emlpsols/sol6.html</a>.</span>&nbsp;<span>It is a snapshot of the page as it appeared on Aug 5, 2018 18:40:54 GMT.</span>&nbsp;<span>The <a href="http://infolab.stanford.edu/~ullman/emlpsols/sol6.html">current page</a> could have changed in the meantime.</span>&nbsp;<a href="http://support.google.com/websearch/bin/answer.py?hl=en&amp;p=cached&amp;answer=1687222"><span>Learn more</span>.</a></div><div><span style="display:inline-block;margin-top:8px;margin-right:104px;white-space:nowrap"><span style="margin-right:28px"><span style="font-weight:bold">Full version</span></span><span style="margin-right:28px"><a href="http://webcache.googleusercontent.com/search?q=cache:http://infolab.stanford.edu/~ullman/emlpsols/sol6.html&amp;num=1&amp;strip=1&amp;vwsrc=0"><span>Text-only version</span></a></span><span style="margin-right:28px"><a href="http://webcache.googleusercontent.com/search?q=cache:http://infolab.stanford.edu/~ullman/emlpsols/sol6.html&amp;num=1&amp;strip=0&amp;vwsrc=1"><span>View source</span></a></span></span></div><span style="display:inline-block;margin-top:8px;color:#717171"><span>Tip: To quickly find your search term on this page, press <b>Ctrl+F</b> or <b>⌘-F</b> (Mac) and use the find bar.</span></span></div><div style="position:relative;">
+
+<title>Elements of ML Programming, Second Edition (ML97):
+Solutions for Chapter 6</title>
+
+
+
+
+<center><table>
+<tbody><tr><td><img src="http://infolab.stanford.edu/~ullman/emlpsols/gifs/eng.arms.mini.GIF">
+</td><td nowrap="" align="MIDDLE"><font size="6">Elements of ML Programming, 2nd
+Edition (ML97)</font>
+</td></tr></tbody></table></center>
+
+<a name="top"></a>
+<h2>Solutions for Chapter 6</h2>
+
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol6.html#sol61">Solutions for Section 6.1</a><p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol6.html#sol62">Solutions for Section 6.2</a></p><p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol6.html#sol63">Solutions for Section 6.3</a></p><p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol6.html#sol64">Solutions for Section 6.4</a></p><p>
+
+<a name="sol61"></a>
+</p><h2>Solutions for Section 6.1</h2>
+
+<h3>Exercise 6.1.1(a)</h3>
+
+<pre>     type 'a setOfSets = 'a list list;
+</pre>
+
+<h3>Exercise 6.2.1</h3>
+
+<tt>Node(1, Node(2,Empty,Empty), Node(3,Empty,Empty))</tt> is one possible
+answer.
+
+<h3>Exercise 6.2.2</h3>
+
+Define the type by
+
+<pre>     type ('d, 'r) mapTree = ('d * 'r) btree;
+</pre>
+
+Then, we can define the desired tree by
+
+<pre>     val t1 = Node(("a",1), Empty, Empty): (string, int) mapTree;
+</pre>
+
+<h3>Exercise 6.2.4</h3>
+
+<pre>     open TextIO;
+
+     datatype intOrEof = Eof | Int of int;
+
+     fun digit(c) = c &gt;= #"0" andalso c &lt;= #"9";
+
+     fun startInt(file) = startInt1(file, input1(file))
+
+     and startInt1(file, NONE) = Eof
+     |   startInt1(file, SOME c) =
+             if digit(c) then Int(ord(c)-ord(#"0"))
+             else startInt(file);
+
+     fun finishInt(i,file) =
+             if i = Eof then Eof
+             else finishInt1(i,file,input1(file))
+
+     and finishInt1(i, file, NONE) = i
+     |   finishInt1(i as Int(j), file, SOME c) =
+             if digit(c) then
+                     finishInt(Int(10*j+ord(c)-ord(#"0")), file)
+             else i;
+
+     fun getInt(file) = finishInt(startInt(file), file)
+
+     fun sumInts1(file) =
+             let
+                 val i = getInt(file)
+             in
+                 if i = Eof then 0
+                 else let
+                          val Int(j) = i
+                      in
+                          j + sumInts1(file)
+                      end
+             end;
+
+     fun sumInts(filename) = sumInts1(openIn(filename));
+</pre>
+
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/code/ex624.txt">Download this program</a><p>
+
+</p><h3>Exercise 6.2.5(a)</h3>
+
+<pre>     datatype suit = Club | Heart | Diamond | Spade;
+</pre>
+
+<h3>Exercise 6.2.5(c)</h3>
+
+We need a recursive datatype with a basis data constructor, say
+<tt>Int</tt>, to wrap integers, and an inductive data constructor, say
+<tt>Thing</tt>, to wrap a list of things.
+An appropriate declaration is
+
+<pre>     datatype thing =
+         Int of int |
+         Thing of thing list
+</pre>
+
+Here is a typical value of the datatype <tt>thing</tt>.
+
+<pre>     Thing([Int(1), Thing([Int(2)]), Int(3)]);
+</pre>
+
+<h3>Exercise 6.2.7</h3>
+
+<pre>     type 'node graph = ('node * 'node list) list;
+
+     exception NotANode;
+
+     (* succ(a,G) looks up the list of successors of
+        node a in graph G *)
+     fun succ(a,nil) = raise NotANode
+     |   succ(a,(b,L)::tail) =
+             if a=b then L else succ(a,tail);
+
+     (* member(a,L) determines whether a is on list L *)
+     fun member(a,nil) = false
+     |   member(a,b::bs) =
+             if a=b then true else member(a,bs);
+
+     (* search1(L,R,G) finds all the nodes reachable from any
+        of the list of nodes L in graph G, but does not search
+        from the set R of nodes that have already been reached.
+        R is included in the set of reached nodes that is
+        eventually returned. *)
+     fun search1(nil,R,G) = R
+     |   search1(x::xs,R,G) =
+             if member(x,R) then search1(xs,R,G)
+             else (* x is a new node, never before seen *)
+                 search1(succ(x,G)@xs, x::R, G);
+
+     (* search(a,G) finds the set of nodes reachable from
+        a in graph G *)
+     fun search(a,G) = search1([a],nil,G);
+</pre>
+
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/code/ex627.txt">Download this program</a><p>
+</p><p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol6.html#top">Return to Top</a>
+</p><p>
+
+<a name="sol63"></a>
+</p><h2>Solutions for Section 6.3</h2>
+
+<h3>Exercise 6.3.2(a)</h3>
+
+<pre>     fun lookup lt Empty a = raise Missing
+     |   lookup lt (Node((c,b),left,right)) a =
+             if lt(a,c) then lookup lt left a
+             else if lt(c,a) then lookup lt right a
+             else (* a=c *) b;
+</pre>
+
+<h3>Exercise 6.3.3(a)</h3>
+
+<pre>     val lookup1 = lookup (op &lt; : real*real-&gt;bool);
+</pre>
+
+and similarly for the other two functions.
+An alternative is
+
+<pre>     val lookup1 = lookup (fn (x:real,y) =&gt; x&lt;y);
+</pre>
+
+using an anonymous function.
+However, beware
+
+<pre>     val lookup1 = lookup (op &lt;:real*real-&gt;bool);
+</pre>
+
+which, although it looks almost identical to our first solution, is an
+error.
+Do you see why?
+
+<h3>Exercise 6.3.4</h3>
+
+The idea is to form the set of integers into as balanced a binary tree
+as we can.
+The longest paths will then be proportional to the logarithm of the
+size of <i>S</i>.
+Here is an example where the set of integers is 1, 4, 9, 16, 25, and 36.
+We leave as an interesting challenge a function that will take a
+list of integers and form them into a binary search tree that is as
+balanced as possible.
+
+<pre>     val lookupS = lookup (op &lt;) (
+			Node(16,
+			    Node(4,
+				Node(1,Empty,Empty),
+				Node(9,Empty,Empty)
+			    ),
+			    Node(36,
+				Node(25,Empty,Empty),
+				Empty
+			    )
+			)
+		    );
+</pre>
+
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/code/ex634.txt">Download this program</a><p>
+</p><p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol6.html#top">Return to Top</a>
+</p><p>
+
+<a name="sol64"></a>
+</p><h2>Solutions for Section 6.4</h2>
+
+<h3>Exercise 6.4.1</h3>
+
+Here is a solution to part (a).
+We test whether <i>x</i> is at the root, and if not, test whether it is
+either in the first subtree or in the tree obtained by removing the
+first subtree.
+
+<pre>fun isOn (Node(a,nil)) x = (a=x)
+|   isOn (Node(a,t::ts)) x =
+        isOn t x orelse isOn (Node(a,ts)) x;
+</pre>
+
+For part (b), we found it more convenient to put the element <i>x</i>
+first among the arguments.
+Then, the following works:
+
+<pre>fun isOn x (Node(a,L)) =
+        (a=x) orelse
+        foldr (fn (x,y) =&gt; x orelse y) false
+            (map (isOn x) L);
+</pre>
+
+If <i>x</i> is required to be the second argument, then we need to
+define another anonymous function to take the place of <tt>isOn x</tt>,
+which is a function that takes a tree as argument and tells whether
+<i>x</i> is on that tree.
+Note that in the above code, <tt>(map (isOn x) L)</tt> returns a list of
+booleans, each telling whether <i>x</i> is on one of the subtrees in the
+list <i>L</i>.
+Then, <tt>foldr</tt> is applied to the function that takes the OR of its
+arguments, an initial value <tt>false</tt>, and the list of booleans
+that resulted from the application of <tt>map</tt>.
+
+<h3>Exercise 6.4.4(a)</h3>
+
+<pre>     fun preOrder(Node(a,nil)) = [a]
+     |   preOrder(Node(a,t::ts)) =
+              a :: preOrder(t) @ (tl(preOrder(Node(a,ts))));
+</pre>
+
+<h3>Exercise 6.4.6</h3>
+
+<pre>     fun preOrder1(Node(a,nil), L) = a::L
+     |   preOrder1(Node(a,t::ts), L) =
+             a :: preOrder1(t, tl(preOrder1(Node(a,ts),L)));
+
+     fun preOrder(T) = preOrder1(T,nil);
+</pre>
+
+Function <tt>preOrder1</tt> takes a tree and a list of labels <i>L</i>
+that must be appended to the preorder of the tree.
+If the tree is a single node, then the result is the label <i>a</i> of
+that node followed by the list <i>L</i>.
+If the root has one or more subtrees, a call to <tt>preOrder1</tt>
+computes the preorder listing of the tree with the first subtree
+removed, followed by the list <i>L</i>.
+We use <tt>tl</tt> to remove the premature occurrence of the root label
+<i>a</i> from this list.
+The list then becomes the second argument of another call to
+<tt>preOrder1</tt>, which applies to the first subtree and results in
+the preorder listing of that subtree followed by the preorder listings
+of all the other subtrees, and then the list <i>L</i>.
+Since <i>a</i> is put on the front of this list, <tt>preOrder1</tt>
+correctly returns the preorder listing of its tree argument followed by
+its second (list) argument.
+<p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol6.html#top">Return to Top</a>
+</p><p>
+
+
+
+</p></div></body></html>

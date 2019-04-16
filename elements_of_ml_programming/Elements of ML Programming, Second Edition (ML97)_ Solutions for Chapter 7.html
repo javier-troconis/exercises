@@ -1,0 +1,409 @@
+
+<!-- saved from url=(0107)http://webcache.googleusercontent.com/search?q=cache:http://infolab.stanford.edu/~ullman/emlpsols/sol7.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><!--<base href="http://infolab.stanford.edu/~ullman/emlpsols/sol7.html">--><base href="."><style>body{margin-left:0;margin-right:0;margin-top:0}#bN015htcoyT__google-cache-hdr{background:#f5f5f5;font:13px arial,sans-serif;text-align:left;color:#202020;border:0;margin:0;border-bottom:1px solid #cecece;line-height:16px;padding:16px 28px 24px 28px}#bN015htcoyT__google-cache-hdr *{display:inline;font:inherit;text-align:inherit;color:inherit;line-height:inherit;background:none;border:0;margin:0;padding:0;letter-spacing:0}#bN015htcoyT__google-cache-hdr a{text-decoration:none;color:#1a0dab}#bN015htcoyT__google-cache-hdr a:hover{text-decoration:underline}#bN015htcoyT__google-cache-hdr a:visited{color:#609}#bN015htcoyT__google-cache-hdr div{display:block;margin-top:4px}#bN015htcoyT__google-cache-hdr b{font-weight:bold;display:inline-block;direction:ltr}</style></head><body bgcolor="E0F7F0"><div id="bN015htcoyT__google-cache-hdr"><div><span>This is Google's cache of <a href="http://infolab.stanford.edu/~ullman/emlpsols/sol7.html">http://infolab.stanford.edu/~ullman/emlpsols/sol7.html</a>.</span>&nbsp;<span>It is a snapshot of the page as it appeared on Aug 21, 2018 12:54:18 GMT.</span>&nbsp;<span>The <a href="http://infolab.stanford.edu/~ullman/emlpsols/sol7.html">current page</a> could have changed in the meantime.</span>&nbsp;<a href="http://support.google.com/websearch/bin/answer.py?hl=en&amp;p=cached&amp;answer=1687222"><span>Learn more</span>.</a></div><div><span style="display:inline-block;margin-top:8px;margin-right:104px;white-space:nowrap"><span style="margin-right:28px"><span style="font-weight:bold">Full version</span></span><span style="margin-right:28px"><a href="http://webcache.googleusercontent.com/search?q=cache:http://infolab.stanford.edu/~ullman/emlpsols/sol7.html&amp;num=1&amp;strip=1&amp;vwsrc=0"><span>Text-only version</span></a></span><span style="margin-right:28px"><a href="http://webcache.googleusercontent.com/search?q=cache:http://infolab.stanford.edu/~ullman/emlpsols/sol7.html&amp;num=1&amp;strip=0&amp;vwsrc=1"><span>View source</span></a></span></span></div><span style="display:inline-block;margin-top:8px;color:#717171"><span>Tip: To quickly find your search term on this page, press <b>Ctrl+F</b> or <b>⌘-F</b> (Mac) and use the find bar.</span></span></div><div style="position:relative;">
+
+<title>Elements of ML Programming, Second Edition (ML97):
+Solutions for Chapter 7</title>
+
+
+
+
+<center><table>
+<tbody><tr><td><img src="http://infolab.stanford.edu/~ullman/emlpsols/gifs/eng.arms.mini.GIF">
+</td><td nowrap="" align="MIDDLE"><font size="6">Elements of ML Programming, 2nd
+Edition (ML97)</font>
+</td></tr></tbody></table></center>
+
+<a name="top"></a>
+<h2>Solutions for Chapter 7</h2>
+
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol7.html#sol71">Solutions for Section 7.1</a><p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol7.html#sol72">Solutions for Section 7.2</a></p><p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol7.html#sol73">Solutions for Section 7.3</a></p><p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol7.html#sol74">Solutions for Section 7.4</a></p><p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol7.html#sol75">Solutions for Section 7.5</a></p><p>
+
+<a name="sol71"></a>
+</p><h2>Solutions for Section 7.1</h2>
+
+<h3>Exercise 7.1.1(a)</h3>
+
+<pre>     type dino = {name:string, height:real, weight:real};
+</pre>
+
+<h3>Exercise 7.1.1(c)</h3>
+
+<pre>     val brachio:dino =
+         {name="Brachiosaurus", height=40.0, weight=50.0}
+</pre>
+
+<h3>Exercise 7.1.1(e)</h3>
+
+<pre>     #weight(brachio)
+</pre>
+
+<h3>Exercise 7.1.2(a)</h3>
+
+<pre>     fun tallest (L : dino list) = foldr Real.max 0.0 (map (#height) L);
+</pre>
+
+We must declare <i>L</i> to be a <tt>dino list</tt>, so ML can deduce
+the type of records in the list.
+We then use <tt>map</tt> to apply to each record on the list <i>L</i>
+the function <tt>#height</tt> that extracts the height component.
+The resulting list of reals is folded, using the function
+<tt>Real.max</tt> in the structure <tt>Real</tt> that takes the maximum
+of two reals.
+
+<h3>Exercise 7.1.3(a)</h3>
+
+<pre>     type student = {name:string, ID:int, courses: string list};
+
+     (* findName(n,L) produces those student records with
+        name field n *)
+     fun findName(n,nil) = nil
+     |   findName(n,(r:student)::rs) =
+             if n = #name(r) then r::findName(n,rs)
+             else findName(n,rs);
+</pre>
+
+A simpler version of <tt>findName</tt> uses a built-in function
+<tt>List.filter</tt> that is a Curried version of the function
+<tt>filter</tt> that we discussed in Section 5.4.5.
+To get the built-in <tt>filter</tt>, we must go to another of the
+structures, <tt>List</tt>, that is found in the standard basis; see
+Section 9.4.7.
+Here is the code:
+
+<pre>     fun findName(n,L) =
+             List.filter (fn (r:student) =&gt; (n = #name(r))) L;
+</pre>
+That is, we filter the list of student
+records <i>L</i> using the predicate that the
+<tt>name</tt> field of the record be <i>n</i>.
+
+<h3>Exercise 7.1.3(c)</h3>
+
+<pre>     (* enrollment(c,L) produces the names in those of the
+        records on list L that have a course list including
+        course c *)
+     fun enrollment(c,nil) = nil
+     |   enrollment(c,(r:student)::rs) =
+             if #courses(r) = nil then enrollment(c,rs)
+             else if c = hd(#courses(r)) then
+                 #name(r)::enrollment(c,rs)
+             else enrollment(c, {name = #name(r), ID = #ID(r),
+                     courses = tl(#courses(r))}::rs);
+</pre>
+
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/code/ex713.txt">Download this program and the code for
+Exercise 7.1.3(a)</a><p>
+
+This function uses a trick that first appeared in Section 6.4.2, where we
+operated upon a tree by modifying the tree to remove one node at a time.
+Here, we could have written a function that tests whether a given course
+is present in a list of courses, and used that in the function
+<tt>enrollment</tt>.
+Instead, we have chosen to write only one function, which, when it does
+not find the desired course <i>c</i> at the head of the list of courses,
+calls itself recursively with the head of the course list removed.
+The first two cases of this function handle the situations where the list
+of courses is empty (when <i>c</i> is surely not among them), and where the
+head of the list equals <i>c</i> (when <i>c</i> surely is among the courses).
+</p><p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol7.html#top">Return to Top</a>
+</p><p>
+
+<a name="sol72"></a>
+</p><h2>Solutions for Section 7.2</h2>
+
+<h3>Exercise 7.2.1(a)</h3>
+
+<pre>     val A = Array.array(20, nil : real list);
+</pre>
+
+<h3>Exercise 7.2.1(c)</h3>
+
+<pre>     Array.sub(A,29);
+</pre>
+
+<h3>Exercise 7.2.1(e)</h3>
+
+<pre>     Array.update(A, 10, 43);
+</pre>
+
+<h3>Exercise 7.2.2(a)</h3>
+
+<pre>     open Array;
+
+     (* swap exchanges A[i] with A[j] *)
+     fun swap(A,i,j) =
+             let
+                 val temp = sub(A,i)
+             in
+                 (update(A,i,sub(A,j)); update(A,j,temp))
+             end;
+
+     (* insert(A,i) pushes A[i] left until it finds an array element
+        smaller than it.  i.e., insert(A,i) inserts A[i] into its
+        proper place in a sorted array A[0]...A[i-1] *)
+     fun insert(A,0) = ()
+     |   insert(A,i) =
+             if sub(A,i-1) &gt;= sub(A,i) then
+                 (swap(A,i-1,i); insert(A,i-1))
+             else ();
+
+     (* isort1(A,i,n) inserts A[i]...A[n-1] into the sorted array
+        A[0]...A[i-1] *)
+     fun isort1(A,i,n) =
+             if i&gt;=n then ()
+             else (insert(A,i); isort1(A,i+1,n));
+
+     (* An insertion-sort function *)
+     fun isort(A,n) = isort1(A,1,n);
+</pre>
+
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/code/ex722.txt">Download this program</a><p>
+
+</p><h3>Exercise 7.2.3(a)</h3>
+
+<pre>     (* cycle1 moves positions i,...,n-1 of array A one position down *)
+     fun cycle1(A,n,i) =
+             if i &gt;= n then ()
+             else (
+                     Array.update(A,i-1,Array.sub(A,i));
+                     cycle1(A,n,i+1)
+             );
+     
+     fun cycle(A,n) =
+             let
+                 val temp = Array.sub(A,0)
+             in
+                 (
+                     cycle1(A,n,1);
+                     Array.update(A,n-1,temp)
+                 )
+             end;
+</pre>
+
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/code/ex723a.txt">Download this program</a><p>
+
+</p><h3>Exercise 7.2.3(c)</h3>
+
+<pre>     (* rev1 reverses A[i] through A[n-i-1] *)
+     fun rev1(A,n,i) =
+             if 2*i+1 &gt;= n then ()
+             else
+                 let
+                     val temp = Array.sub(A,i);
+                 in
+                     (
+                         Array.update(A,i,Array.sub(A,n-i-1));
+                         Array.update(A,n-i-1,temp);
+                         rev1(A,n,i+1)
+                     )
+                 end;
+     
+     fun reverse(A,n) = rev1(A,n,0);
+</pre>
+
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/code/ex723c.txt">Download this program</a><p>
+</p><p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol7.html#top">Return to Top</a>
+</p><p>
+
+<a name="sol73"></a>
+</p><h2>Solutions for Section 7.3</h2>
+
+<h3>Exercise 7.3.1(a)</h3>
+
+<pre>     val i = ref 10;
+</pre>
+
+<h3>Exercise 7.3.1(c)</h3>
+
+<pre>     i := 20;
+</pre>
+
+<h3>Exercise 7.3.2(a)</h3>
+
+<pre>     (!x+!y)*(!x+!y);
+</pre>
+
+<h3>Exercise 7.3.3</h3>
+
+An expression must follow the <tt>do</tt>, and a val-declaration is not
+an expression.
+You get a syntax error message.
+
+<h3>Exercise 7.3.5(a)</h3>
+
+<pre>     datatype 'a linkedList = Nil |
+         Cell of {element: 'a, next: 'a linkedList ref};
+</pre>
+For instance, a cell with element 1 and a nil <tt>next</tt> pointer
+could be defined by
+
+<pre>     val c1 = Cell{element=1, next= ref Nil};
+</pre>
+Notice that no parentheses are needed around the argument of a
+<tt>Cell</tt> data constructor, because the curly braces group its
+argument properly.
+
+<h3>Exercise 7.3.5(c)</h3>
+
+<pre>     fun skip Nil = raise BadCell
+     |   skip(Cell{next = ref Nil,...}) = raise BadCell
+     |   skip(Cell{next = x as ref(Cell{next=y,...}),...}) =
+             x := !y;
+</pre>
+
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/code/ex735.txt">Download code for Exercise 7.3.5(a,c)</a><p>
+</p><p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol7.html#top">Return to Top</a>
+</p><p>
+
+<a name="sol74"></a>
+</p><h2>Solutions for Section 7.4</h2>
+
+<h3>Exercise 7.4.1</h3>
+
+<pre>     datatype 'a bucket = Empty | Deleted | Filled of 'a;
+
+     (* search for x starting at bucket i, but not passing bucket j.
+        Here and elsewhere, n is the number of buckets. *)
+     fun lookup1(A,i,j,n,x) =
+             if Array.sub(A,i) = Filled(x) then true
+             else if Array.sub(A,i) = Empty then false
+             else if i=j then false (* we have searched the whole
+                                       hash table *)
+             else lookup1(A,(i+1) mod n,j,n,x);
+
+     (* lookup x in hash table A of n buckets, using hash function h *)
+     fun lookup(A,h,n,x) = lookup1(A,h(x),(h(x)-1) mod n,n,x);
+
+     (* delete1 deletes x from A; parameters are as for lookup1 *)
+     fun delete1(A,i,j,n,x) =
+             if Array.sub(A,i) = Filled(x) then
+                 Array.update(A,i,Deleted)
+             else if Array.sub(A,i) = Empty then () (* x cannot be
+                             in the hash table *)
+             else if i=j then () (* we have searched all buckets and
+                             not found x *)
+             else delete1(A,(i+1) mod n,j,n,x);
+
+     (* delete takes parameters like lookup *)
+     fun delete(A,h,n,x) = delete1(A,h(x),(h(x)-1) mod n,n,x);
+
+     exception NoMoreRoom;
+
+     (* insert1 is analogous to lookup1 *)
+     fun insert1(A,i,j,n,x) =
+             if Array.sub(A,i) = Empty orelse Array.sub(A,i) = Deleted then
+                     Array.update(A,i,Filled(x))
+             else if i=j then raise NoMoreRoom
+             else insert1(A,(i+1) mod n,j,n,x);
+
+     (* insert is analogous to lookup *)
+     fun insert(A,h,n,x) = insert1(A,h(x),(h(x)-1) mod n,n,x);
+</pre>
+
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/code/ex741.txt">Download this program</a><p>
+</p><p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol7.html#top">Return to Top</a>
+</p><p>
+
+<a name="sol75"></a>
+</p><h2>Solutions for Section 7.5</h2>
+
+<h3>Exercise 7.5.1</h3>
+
+<pre>     open Array;
+
+     fun pivot(M,m,n) =
+             if m&gt;=n then 0.0
+             else if m=n-1 then sub(sub(M,m),m)
+             else (* 0&lt;m&lt;n-1 *) (
+                 let (* normalize  row m to right of diagonal *)
+                     val i = ref (m+1);
+                     val a = sub(sub(M,m),m)
+                 in
+                     while !i&lt;n do (
+                         update(sub(M,m), !i, sub(sub(M,m),!i)/a);
+                         i := !i + 1
+                     )
+                 end;
+                 let (* subtract M[i,m]*M[m,j] from M[i,j]
+                        for all i and j such that m&lt;i,j&lt;n *)
+                     val i = ref (m+1);
+                     val j = ref (m+1)
+                 in
+                     while !i&lt;n do (
+                         while !j&lt;n do (
+                             update(sub(M,!i),!j,sub(sub(M,!i),!j)-
+                                 sub(sub(M,!i),m)*sub(sub(M,m),!j));
+                             j := !j + 1
+                         );
+                         j := m + 1;
+                         i := !i + 1
+                     )
+                 end;
+                 (* result is M[m,m] times recursive call on matrix
+                    starting at row and column m+1 *)
+                 sub(sub(M,m),m)*pivot(M,m+1,n)
+             );
+</pre>
+
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/code/ex751.txt">Download this program</a><p>
+
+</p><h3>Exercise 7.5.2</h3>
+
+The functions <tt>condense</tt> of Exercise 5.2.4 and <tt>pivot</tt> of Exercise 7.5.1 each
+take time proportional to <i>n^3</i> on a matrix of side <i>n</i>.
+Observe that in Exercise 5.2.4, functions <tt>normalize</tt> and <tt>condense1</tt>
+each take time proportional to <i>n</i>.
+Function <tt>condense2</tt> calls <tt>condense1</tt> no more than <i>n</i> times
+and thus takes time proportional to <i>n^2</i>.
+Finally, <tt>condense</tt> calls <tt>normalize</tt> and
+<tt>condense2</tt> no more than <i>n</i> times each,
+and thus takes time proportional to <i>n^3</i>.
+
+Function <tt>pivot</tt> of Exercise 7.5.1 uses two nested loops, each
+of which repeats no more than <i>n</i> times.
+Function <tt>pivot</tt> thus takes time
+proportional to <i>n^2</i> before calling itself recursively with the next
+higher value of <i>m</i>.
+Since <i>m</i> ranges from 0 to <i>n-1</i>, there are <i>n</i> recursive calls.
+Each takes time proportional to <i>n^2</i>, so the total time
+is proportional to <i>n^3</i>.
+
+<h3>Exercise 7.5.4(a)</h3>
+
+<pre>     fun matrix(n,m,v:real) =
+         let
+             val M = Array.array(n,Array.array(m,v));
+             val i = ref 1
+         in
+             (
+                 while !i&lt;n do (
+                     Array.update(M,!i,Array.array(m,v));
+                     i := !i + 1
+                 );
+                 M
+             )
+         end;
+<pre>
+A matrix is an array of arrays.
+Notice that when we initialize a matrix we have to create a new array
+for each row of the matrix, which we do in the while-loop.
+
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/code/ex754.txt">Download this program</a><p>
+
+</p><h3>Exercise 7.5.6(a)</h3>
+
+<pre>     for(1,10,fn x=&gt;(print(Int.toString x); print " "));
+</pre>
+
+
+
+</pre></pre></div></body></html>

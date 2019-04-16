@@ -1,0 +1,349 @@
+
+<!-- saved from url=(0107)http://webcache.googleusercontent.com/search?q=cache:http://infolab.stanford.edu/~ullman/emlpsols/sol8.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><!--<base href="http://infolab.stanford.edu/~ullman/emlpsols/sol8.html">--><base href="."><style>body{margin-left:0;margin-right:0;margin-top:0}#bN015htcoyT__google-cache-hdr{background:#f5f5f5;font:13px arial,sans-serif;text-align:left;color:#202020;border:0;margin:0;border-bottom:1px solid #cecece;line-height:16px;padding:16px 28px 24px 28px}#bN015htcoyT__google-cache-hdr *{display:inline;font:inherit;text-align:inherit;color:inherit;line-height:inherit;background:none;border:0;margin:0;padding:0;letter-spacing:0}#bN015htcoyT__google-cache-hdr a{text-decoration:none;color:#1a0dab}#bN015htcoyT__google-cache-hdr a:hover{text-decoration:underline}#bN015htcoyT__google-cache-hdr a:visited{color:#609}#bN015htcoyT__google-cache-hdr div{display:block;margin-top:4px}#bN015htcoyT__google-cache-hdr b{font-weight:bold;display:inline-block;direction:ltr}</style></head><body bgcolor="E0F7F0"><div id="bN015htcoyT__google-cache-hdr"><div><span>This is Google's cache of <a href="http://infolab.stanford.edu/~ullman/emlpsols/sol8.html">http://infolab.stanford.edu/~ullman/emlpsols/sol8.html</a>.</span>&nbsp;<span>It is a snapshot of the page as it appeared on Aug 29, 2018 23:30:04 GMT.</span>&nbsp;<span>The <a href="http://infolab.stanford.edu/~ullman/emlpsols/sol8.html">current page</a> could have changed in the meantime.</span>&nbsp;<a href="http://support.google.com/websearch/bin/answer.py?hl=en&amp;p=cached&amp;answer=1687222"><span>Learn more</span>.</a></div><div><span style="display:inline-block;margin-top:8px;margin-right:104px;white-space:nowrap"><span style="margin-right:28px"><span style="font-weight:bold">Full version</span></span><span style="margin-right:28px"><a href="http://webcache.googleusercontent.com/search?q=cache:http://infolab.stanford.edu/~ullman/emlpsols/sol8.html&amp;num=1&amp;strip=1&amp;vwsrc=0"><span>Text-only version</span></a></span><span style="margin-right:28px"><a href="http://webcache.googleusercontent.com/search?q=cache:http://infolab.stanford.edu/~ullman/emlpsols/sol8.html&amp;num=1&amp;strip=0&amp;vwsrc=1"><span>View source</span></a></span></span></div><span style="display:inline-block;margin-top:8px;color:#717171"><span>Tip: To quickly find your search term on this page, press <b>Ctrl+F</b> or <b>⌘-F</b> (Mac) and use the find bar.</span></span></div><div style="position:relative;">
+
+<title>Elements of ML Programming, Second Edition (ML97):
+Solutions for Chapter 8</title>
+
+
+
+
+<center><table>
+<tbody><tr><td><img src="http://infolab.stanford.edu/~ullman/emlpsols/gifs/eng.arms.mini.GIF">
+</td><td nowrap="" align="MIDDLE"><font size="6">Elements of ML Programming, 2nd
+Edition (ML97)</font>
+</td></tr></tbody></table></center>
+
+<a name="top"></a>
+<h2>Solutions for Chapter 8</h2>
+
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol8.html#sol82">Solutions for Section 8.2</a><p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol8.html#sol83">Solutions for Section 8.3</a></p><p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol8.html#sol84">Solutions for Section 8.4</a></p><p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol8.html#sol85">Solutions for Section 8.5</a></p><p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol8.html#sol86">Solutions for Section 8.6</a></p><p>
+
+<a name="sol82"></a>
+</p><h2>Solutions for Section 8.2</h2>
+
+<h3>Exercise 8.2.1</h3>
+
+<pre>     structure Tree = struct
+         exception Missing;
+
+         datatype 'label tree =
+             Node of 'label * 'label tree list;
+
+         (* create a one-node tree *)
+         fun create(a) = Node(a,nil);
+
+         (* build a tree from a label and a list of trees *)
+         fun build(a,L) = Node(a,L);
+
+         (* find the ith subtree of a tree *)
+         fun subtree(i,Node(a,nil)) = raise Missing
+         |   subtree(1,Node(a,t::ts)) = t
+         |   subtree(i,Node(a,t::ts)) = subtree(i-1,Node(a,ts));
+     end;
+</pre>
+
+<h3>Exercise 8.2.2</h3>
+
+An appropriate signature is:
+
+<pre>     signature SIMPLE = sig
+         exception Missing;
+         datatype 'label tree =
+             Node of 'label * 'label tree list;
+         val build : int * int tree list -&gt; int tree;
+         val subtree : int * int tree -&gt; int tree
+     end;
+</pre>
+
+We can then use this signature to create the desired structure by
+
+<pre>     structure SimpleTree: SIMPLE = Tree;
+</pre>
+
+<h3>Exercise 8.2.3</h3>
+Here is one possible sequence of steps.
+
+<pre>     open SimpleTree;
+     val t2 = build(2,nil);
+     val t3 = build(3,nil);
+     val t1 = build(4,nil);
+     val t4 = build(1,[t1,t2,t3]);
+     subtree(2,t4);
+</pre>
+
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/code/ex823.txt">Download code for Exercises 8.2.1, 8.2.2, and
+8.2.3.</a><p>
+
+</p><h3>Exercise 8.2.6</h3>
+
+<pre>     structure Queue = struct
+         exception EmptyQueue;
+
+         type 'a queue = 'a list;
+
+         val create = nil;
+
+         fun enqueue(x,Q) = Q@[x];
+
+         fun dequeue(nil) = raise EmptyQueue
+         |   dequeue(q::qs) = (q,qs);
+
+         fun isEmpty(nil) = true
+         |   isEmpty(_) = false;
+     end;
+</pre>
+
+Note that we have written <tt>isEmpty</tt> as we did, rather than the more
+succinct <tt>fun isEmpty(Q) = (Q=nil)</tt>, because by matching patterns we
+avoid the equality test and therefore allow the type of <tt>Q</tt> to be
+anything, even a non-equality type.
+
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/code/ex826.txt">Download this program</a><p>
+</p><p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol8.html#top">Return to Top</a>
+</p><p>
+
+<a name="sol83"></a>
+</p><h2>Solutions for Section 8.3</h2>
+
+<h3>Exercise 8.3.2</h3>
+
+<pre>     signature SIM = sig
+         type element;
+         val sim : element * element -&gt; bool
+     end;
+
+     functor MakeSimSet(Sim: SIM):
+         sig
+             type set;
+             val create : set;
+             val insert : Sim.element * set -&gt; set;
+             val findSim : Sim.element * set -&gt; set
+         end
+
+     =
+
+     struct
+         open Sim;
+         type set = element list;
+         val create = nil;
+         fun insert(x,S) = x::S;
+         fun findSim(x,nil) = nil
+         |   findSim(x,s::ss) =
+                 if sim(x,s) then s::findSim(x,ss)
+                 else findSim(x,ss)
+     end;
+
+
+     structure Misspell: SIM =
+         struct
+             type element = string;
+             fun sim("","") = true
+             |   sim("",_) = false
+             |   sim(_,"") = false
+             |   sim(x,y) =
+                 let
+                     val xhead::xtail = explode(x);
+                     val yhead::ytail = explode(y);
+                     val xs = implode(xtail);
+                     val ys = implode(ytail)
+                 in
+                     if xhead=yhead then sim(xs,ys)
+                     else xs=ys
+                 end
+         end;
+
+     structure MisspellSet =
+         MakeSimSet(Misspell);
+</pre>
+
+Note that the code for function <tt>sim</tt> in structure
+<tt>Misspell</tt> will produce a warning because ML
+thinks that when we explode <i>x</i> and <i>y</i>,
+one or both could result in the empty
+list, which would not match the patterns like <tt>xhead::xtail</tt>.
+However, we have caught such cases in the preceding patterns that
+check for one or both strings being empty.
+<p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol8.html#top">Return to Top</a>
+</p><p>
+
+<a name="sol84"></a>
+</p><h2>Solutions for Section 8.4</h2>
+
+<h3>Exercise 8.4.1</h3>
+
+Here is a possible structure called <tt>Pair</tt> with signature <tt>ELEMENT</tt>.
+We have chosen pairs of integers as the type <tt>element</tt>, and the
+function <tt>similar</tt> checks equality of the first components only.
+
+<pre>     structure Pair: ELEMENT  = struct
+         type element = int * int;
+         fun similar((x1,x2), (y1,y2)) = (x1=y1)
+     end;
+</pre>
+
+Then, the following is a sketch of a structure that uses <tt>Pair</tt> as
+its substructure called <tt>Element</tt> and defines the local type
+<tt>elt</tt> to be the same type as appears in structure <tt>Pair</tt>.
+
+<pre>     structure BinaryTree: BTREE = struct
+         structure Element = Pair;
+         type elt = int * int;
+         (* suitable definitions for btree and the functions *)
+     end;
+</pre>
+
+However, should we replace <tt>type elt = int * int</tt> in structure
+<tt>BinaryTree</tt> by any other type,
+for example <tt>type elt = real * int</tt>,
+then we would get an error indicating a violation of a sharing
+constraint.
+<p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol8.html#top">Return to Top</a>
+</p><p>
+
+<a name="sol85"></a>
+</p><h2>Solutions for Section 8.5</h2>
+
+<h3>Exercise 8.5.1</h3>
+
+A solution appears below.
+To understand what is going on, note that in the datatype <tt>tttree</tt>
+the integer components are the separators, and the <tt>tttree</tt>
+components are the subtrees.
+Then, the datatype <tt>oneOrTwo</tt> either wraps one tree in <tt>S</tt> or
+two trees and a separator in <tt>P</tt>.<p>
+
+Function <tt>lookup</tt> is straightforward.
+We use the separators to guide us to the proper leaf.
+Function <tt>insert</tt> requires a lot of work.
+The heart is in a function <tt>insert1</tt> that finds the proper subtree
+into which the insertion occurs and returns a <tt>oneOrTwo</tt>, that is,
+either a single tree or a pair, wrapped appropriately.
+The five auxiliary functions <tt>group</tt> test whether there is a single
+or a pair and produce a wrapped tree or pair, as appropriate.
+The only time a pair is produced is in the case where three subtrees
+become four, as was illustrated in Fig. 8.18 of the text.
+Note that the five <tt>group</tt> functions are named with a code where
+<tt>U</tt> stands for ``unknown'' (we get either a single or a pair) and
+<tt>T</tt> (we get a single tree).
+
+</p><pre>structure TTTree = struct
+        datatype tttree = Two of int * tttree * tttree |
+                Three of int * int * tttree * tttree * tttree |
+                Leaf of int;
+
+        datatype oneOrTwo = S of tttree |
+                P of int * tttree * tttree;
+
+        (* create(i) creates a 2-3 tree with one leaf,
+           labeled i *)
+        fun create(i) = Leaf(i);
+
+        (* lookup(x,T) tells whether integer x is at a leaf of
+           2-3 tree T *)
+        fun lookup(x,Leaf(i)) = (x=i)
+        |   lookup(x,Two(i,T1,T2)) =
+                        if x<i then="" lookup(x,t1)="" else="" lookup(x,t2)="" |="" lookup(x,three(i,j,t1,t2,t3))="if" x<i="" if="" x<j="" (*="" x="">=j *) lookup(x,T3);
+
+        (* the following 5 "group" functions are auxiliaries
+           used in the function insert1 below.
+           See explanation in the text. *)
+        fun groupUT(i,S(T1),T2) = S(Two(i,T1,T2))
+        |   groupUT(i,P(j,T1,T2),T3) = S(Three(j,i,T1,T2,T3));
+
+        fun groupTU(i,T1,S(T2)) = S(Two(i,T1,T2))
+        |   groupTU(i,T1,P(j,T2,T3)) = S(Three(i,j,T1,T2,T3));
+
+        fun groupUTT(i,j,S(T1),T2,T3) = S(Three(i,j,T1,T2,T3))
+        |   groupUTT(i,j,P(k,T1,T2),T3,T4) =
+                        P(i,Two(k,T1,T2),Two(j,T3,T4));
+
+        fun groupTUT(i,j,T1,S(T2),T3) = S(Three(i,j,T1,T2,T3))
+        |   groupTUT(i,j,T1,P(k,T2,T3),T4) =
+                        P(k,Two(i,T1,T2),Two(j,T3,T4));
+
+        fun groupTTU(i,j,T1,T2,S(T3)) = S(Three(i,j,T1,T2,T3))
+        |   groupTTU(i,j,T1,T2,P(k,T3,T4)) =
+                        P(j,Two(i,T1,T2),Two(k,T3,T4));
+
+        (* insert1(x,T) inserts integer x into 2-3 tree T and
+           returns a oneOrTwo, that is, a 2-3 tree wrapped in S
+           or two 2-3 trees wrapped in P *)
+        fun insert1(x,Leaf(i)) =
+                        if x<i then="" p(i,leaf(x),leaf(i))="" else="" if="" x="">i then P(x,Leaf(i),Leaf(x))
+                        else S(Leaf(i))
+        |   insert1(x,Two(i,T1,T2)) =
+                        if x<i then="" grouput(i,insert1(x,t1),t2)="" else="" (*="" x="">=i *)
+                                groupTU(i,T1,insert1(x,T2))
+        |   insert1(x,Three(i,j,T1,T2,T3)) =
+                        if x<i then="" grouputt(i,j,insert1(x,t1),t2,t3)="" else="" if="" x<j="" grouptut(i,j,t1,insert1(x,t2),t3)="" (*="" x="">=j *)
+                                groupTTU(i,j,T1,T2,insert1(x,T3));
+
+        (* unwrap(X) either removes the one tree from an S or
+           creates a new node with the two subtrees found
+           inside a P. *)
+        fun unwrap(S(T)) = T
+        |   unwrap(P(i,T1,T2)) = Two(i,T1,T2);
+
+        (* insert(x,T) inserts x into 2-3 tree T. *)
+        fun insert(x,T) = unwrap(insert1(x,T))
+end;
+</i></i></i></i></pre><i then="" lookup(x,t1)="" else="" lookup(x,t2)="" |="" lookup(x,three(i,j,t1,t2,t3))="if" x<i="" if="" x<j="" (*="" x=""><i then="" p(i,leaf(x),leaf(i))="" else="" if="" x=""><i then="" grouput(i,insert1(x,t1),t2)="" else="" (*="" x=""><i then="" grouputt(i,j,insert1(x,t1),t2,t3)="" else="" if="" x<j="" grouptut(i,j,t1,insert1(x,t2),t3)="" (*="" x="">
+
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/code/ex851.txt">Download this program</a><p>
+
+</p><h3>Exercise 8.5.5(a)</h3>
+
+The user only needs to use the functions <tt>create</tt>,
+<tt>lookup</tt>, <tt>insert</tt>, and <tt>delete</tt>.
+All the other functions and the constant <i>b</i> can (and should) be
+hidden.
+
+<h3>Exercise 8.5.5(b)</h3>
+
+<pre>structure SafeHash: sig
+                val create: unit -&gt; string hashTable;
+                val lookup: string hashTable * string -&gt; bool;
+                val insert: string hashTable * string -&gt; unit;
+                val delete: string hashTable * string -&gt; unit;
+        end
+= Hash;
+</pre>
+
+For the above to make sense, we need to assume that the structure
+<tt>Hash</tt> has a type <tt>'a hashTable</tt> representing a hash table
+whose elements are of arbitrary type.
+If that were not the case, then the type of a hash table would probably
+be <tt>'a list array</tt>.
+<p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol8.html#top">Return to Top</a>
+</p><p>
+
+<a name="sol86"></a>
+</p><h2>Solutions for Section 8.6</h2>
+
+<h3>Exercise 8.6.1</h3>
+
+The cycles are:
+
+<ol>
+<li>0000 is a cycle by itself.
+</li><li>1001 is a cycle by itself.
+</li><li>1110 and 0111 form a cycle of length 2.
+</li><li>1100, 0110, and 0011 form a cycle of length 3.
+</li><li>1010, 0101, and 1111 form a cycle of length 3.
+</li><li>1000, 0100, 0010, 0001, 1101, and 1011 form a cycle of length 6.
+</li></ol>
+<p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol8.html#top">Return to Top</a>
+
+
+
+</p></i></i></i></i></div></body></html>

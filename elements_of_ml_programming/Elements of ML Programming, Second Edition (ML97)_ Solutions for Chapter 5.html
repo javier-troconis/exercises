@@ -1,0 +1,609 @@
+
+<!-- saved from url=(0107)http://webcache.googleusercontent.com/search?q=cache:http://infolab.stanford.edu/~ullman/emlpsols/sol5.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><!--<base href="http://infolab.stanford.edu/~ullman/emlpsols/sol5.html">--><base href="."><style>body{margin-left:0;margin-right:0;margin-top:0}#bN015htcoyT__google-cache-hdr{background:#f5f5f5;font:13px arial,sans-serif;text-align:left;color:#202020;border:0;margin:0;border-bottom:1px solid #cecece;line-height:16px;padding:16px 28px 24px 28px}#bN015htcoyT__google-cache-hdr *{display:inline;font:inherit;text-align:inherit;color:inherit;line-height:inherit;background:none;border:0;margin:0;padding:0;letter-spacing:0}#bN015htcoyT__google-cache-hdr a{text-decoration:none;color:#1a0dab}#bN015htcoyT__google-cache-hdr a:hover{text-decoration:underline}#bN015htcoyT__google-cache-hdr a:visited{color:#609}#bN015htcoyT__google-cache-hdr div{display:block;margin-top:4px}#bN015htcoyT__google-cache-hdr b{font-weight:bold;display:inline-block;direction:ltr}</style></head><body bgcolor="E0F7F0"><div id="bN015htcoyT__google-cache-hdr"><div><span>This is Google's cache of <a href="http://infolab.stanford.edu/~ullman/emlpsols/sol5.html">http://infolab.stanford.edu/~ullman/emlpsols/sol5.html</a>.</span>&nbsp;<span>It is a snapshot of the page as it appeared on Aug 8, 2018 17:28:03 GMT.</span>&nbsp;<span>The <a href="http://infolab.stanford.edu/~ullman/emlpsols/sol5.html">current page</a> could have changed in the meantime.</span>&nbsp;<a href="http://support.google.com/websearch/bin/answer.py?hl=en&amp;p=cached&amp;answer=1687222"><span>Learn more</span>.</a></div><div><span style="display:inline-block;margin-top:8px;margin-right:104px;white-space:nowrap"><span style="margin-right:28px"><span style="font-weight:bold">Full version</span></span><span style="margin-right:28px"><a href="http://webcache.googleusercontent.com/search?q=cache:http://infolab.stanford.edu/~ullman/emlpsols/sol5.html&amp;num=1&amp;strip=1&amp;vwsrc=0"><span>Text-only version</span></a></span><span style="margin-right:28px"><a href="http://webcache.googleusercontent.com/search?q=cache:http://infolab.stanford.edu/~ullman/emlpsols/sol5.html&amp;num=1&amp;strip=0&amp;vwsrc=1"><span>View source</span></a></span></span></div><span style="display:inline-block;margin-top:8px;color:#717171"><span>Tip: To quickly find your search term on this page, press <b>Ctrl+F</b> or <b>⌘-F</b> (Mac) and use the find bar.</span></span></div><div style="position:relative;">
+<title>Elements of ML Programming, Second Edition (ML97):
+Solutions for Chapter 5</title>
+
+
+
+
+<center><table>
+<tbody><tr><td><img src="http://infolab.stanford.edu/~ullman/emlpsols/gifs/eng.arms.mini.GIF">
+</td><td nowrap="" align="MIDDLE"><font size="6">Elements of ML Programming, 2nd
+Edition (ML97)</font>
+</td></tr></tbody></table></center>
+
+<a name="top"></a>
+<h2>Solutions for Chapter 5</h2>
+
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol5.html#sol51">Solutions for Section 5.1</a><p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol5.html#sol52">Solutions for Section 5.2</a></p><p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol5.html#sol53">Solutions for Section 5.3</a></p><p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol5.html#sol54">Solutions for Section 5.4</a></p><p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol5.html#sol55">Solutions for Section 5.5</a></p><p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol5.html#sol56">Solutions for Section 5.6</a></p><p>
+
+<a name="sol51"></a>
+</p><h2>Solutions for Section 5.1</h2>
+
+<h3>Exercise 5.1.2(a)</h3>
+
+<pre>     val rec padd = fn
+             (P,nil) =&gt; P |
+             (nil,Q) =&gt; Q |
+             ((p:real)::ps, q::qs) =&gt; (p+q)::padd(ps, qs);
+<pre>
+<h3>Exercise 5.1.2(e)</h3>
+
+<pre>     val rec printList = fn
+             nil =&gt; () |
+             x::xs =&gt; (
+                 print(Int.toString(x));
+                 print("\n"); 
+                 printList(xs)
+             );
+</pre>
+
+<h3>Exercise 5.1.3</h3>
+
+The most useful case-expression is probably the following.
+
+<pre>     case y mod 400 of
+         0 =&gt; true |
+         100 =&gt; false |
+         200 =&gt; false |
+         300 =&gt; false |
+         _ =&gt; y mod 4 = 0;
+</pre>
+
+<h3>Exercise 5.1.4(a)</h3>
+
+<pre>     case E of
+         true =&gt; true |
+         false =&gt; F;
+</pre>
+<p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol5.html#top">Return to Top</a>
+</p><p>
+
+<a name="sol52"></a>
+</p><h2>Solutions for Section 5.2</h2>
+
+<h3>Exercise 5.2.2</h3>
+
+Modified 6/11/04.
+<p>
+
+</p><pre>     exception Negative of int;
+
+     fun fact1(0) = 1
+     |   fact1(n) =
+             if n&gt;0 then n*fact1(n-1)
+             else raise Negative(n);
+
+     fun fact(n) = fact1(n) handle Negative(n) =&gt; (
+         print("Warning: negative argument ");
+         print(Int.toString(n));
+         print(" found\n");
+         0
+     );
+</pre>
+
+<h3>Exercise 5.2.3</h3>
+
+<pre>     open TextIO;
+
+     exception Eof;
+
+     fun digit(c) = c &gt;= #"0" andalso c &lt;= #"9";
+
+     fun startInt(file) = startInt1(file, input1(file))
+
+     and startInt1(file, NONE) = raise Eof
+     |   startInt1(file, SOME c) =
+             if digit(c) then ord(c)-ord(#"0")
+             else startInt(file);
+
+     fun finishInt(i,file) =
+             finishInt1(i,file,input1(file))
+
+     and finishInt1(i, file, NONE) = i
+     |   finishInt1(i, file, SOME c) =
+             if digit(c) then
+                     finishInt(10*i+ord(c)-ord(#"0"), file)
+             else i;
+
+     fun getInt(file) = finishInt(startInt(file), file)
+
+     fun sumInts1(file) =
+             (getInt(file) + sumInts1(file)) handle Eof =&gt; 0;
+
+     fun sumInts(filename) = sumInts1(openIn(filename));
+</pre>
+
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/code/ex523.txt">Download this program</a><p>
+
+</p><h3>Exercise 5.2.4</h3>
+
+<pre>exception Unnormalizable;
+
+exception Misshaped;
+
+(* normalize(a,L) divides each element of list L by a *)
+fun normalize(a,nil) = nil
+|   normalize(a,r::rs) = r/a::normalize(a,rs);
+
+(* condense1(b,L1,L2) subtracts from the jth element of L2
+	b times the jth element of L1 for all j and produces
+	the resulting L2 *)
+fun condense1(b:real,nil,nil) = nil
+|   condense1(b,x::xs,y::ys) = (y-b*x)::condense1(b,xs,ys)
+|   condense1(_) = raise Misshaped; (* one list is longer
+			than the other *)
+
+(* condense2(L,M) takes a list L and a list of lists M, and
+	considers each list L' on M.  For L', we subtract from
+	each element in the tail of L' the product of the head
+	of L' and the corresponding element of list L *)
+fun condense2(L,nil) = nil
+|   condense2(L,(x::xs)::Rs) =
+			condense1(x,L,xs)::condense2(L,Rs);
+
+(* condense(M) applies pivotal condensation to matrix M *)
+fun condense([[a]]) = a
+|   condense((b::bs)::Rs) =
+        if b &lt;= 0.0 andalso b &gt;= 0.0 then raise Unnormalizable
+		(* above tests if b=0.0; recall that testing
+		   equality with a real is illegal, as is using
+		   a real in a pattern.  If b=0.0, then we cannot
+		   normalize, because a division by 0.0 is called
+		   for *)
+        else
+	    let
+		val L = normalize(b,bs);
+		val M' = condense2(L,Rs)
+	    in
+		b*condense(M')
+	    end
+|   condense(_) = raise Misshaped; (* the number of rows
+			does not equal the length of each row *)
+</pre>
+
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/code/ex524.txt">Download this program</a><p>
+
+</p><h3>Exercise 5.2.5(a)</h3>
+
+string -&gt; exn
+
+<p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol5.html#top">Return to Top</a>
+</p><p>
+
+<a name="sol53"></a>
+</p><h2>Solutions for Section 5.3</h2>
+
+<h3>Exercise 5.3.1(a)</h3>
+
+<tt>rev1</tt> can only take lists of equality types as arguments.
+Thus, even if we specify the type of list elements, as we have done here
+by mentioning the type <tt>int list -&gt; int list</tt>, it is an error,
+since the specified type is a function type and therefore not an
+equality type.
+
+<h3>Exercise 5.3.1(d)</h3>
+
+Although <tt>rev2</tt> can take as argument lists of any type, including
+nonequality types such as function types, ML will not evaluate an
+expression whose type has variables in it.
+Since the result of this expression is a list of elements of type
+<tt>'a list -&gt; 'a list</tt> (the type of <tt>rev2</tt>), and this
+type has the variable <tt>'a</tt>, there is an error, and ML tells us
+there is a ``nongeneralizable type variable'' in the result.
+
+<h3>Exercise 5.3.1(f)</h3>
+
+This expression is legal.
+Its result is the list <tt>[chr,chr]</tt>, whose type is concrete,
+namely <tt>int -&gt; chr</tt>.
+
+<h3>Exercise 5.3.2(a)</h3>
+
+For <i>(i)</i>, the expression <tt>'a~*~'a~*~int</tt> is the only example.
+For <i>(ii)</i> there are many examples, such as <tt>'a~*~real~list~*~int</tt>.
+For <i>(iii)</i> there are again numerous examples, of which
+<tt>('c~*~'d~list)~*~'b~*~int</tt> is one.
+
+<h3>Exercise 5.3.3(a)</h3>
+
+<pre>     fun f(x,y,z) = (z(x)=y);
+</pre>
+
+<h3>Exercise 5.3.3(c)</h3>
+
+<pre>     fun f(nil, _, z) = z
+     |   f(x::xs, _, _) = x;
+</pre>
+
+<h3>Exercise 5.3.4(a)</h3>
+
+Yes; it is constructed from basic equality
+types using the list and product-type
+mechanisms for constructing new equality types.
+
+<h3>Exercise 5.3.4(c)</h3>
+
+No; the values of this type are functions.
+Incidently, note the domain type for these functions is integer and the
+range type is functions that take a character argument and produce the unit
+as value.
+
+<h3>Exercise 5.3.4(d)</h3>
+
+No; <tt>real</tt> is not an equality type, so any type constructed from
+it will not be an equality type.
+However, similar types, such as <tt>int * (string * string) list</tt>
+are equality types.
+
+<h3>Exercise 5.3.5(a)</h3>
+
+True.
+Both sides have the value <tt>[(1,2),~(3,4)]</tt>.
+
+<h3>Exercise 5.3.5(c)</h3>
+
+True.
+Both sides have the same value as in Exercise5.3.5(a).
+
+<h3>Exercise 5.3.6</h3>
+
+Since the ML compiler is able to do compile-time type checking, it never
+allows to run any code where there is a possible type mismatch, such as
+between a head and tail of a constructed list.
+
+<h3>Exercise 5.3.7(a)</h3>
+
+The expression is legal.
+Function <i>f</i> is of type <tt>'a list -&gt; 'a list</tt>.
+It can be applied to a list of any type; here integer and string
+lists.
+
+<h3>Exercise 5.3.7(b)</h3>
+
+Illegal.
+When <i>f</i> is applied to <tt>nil</tt>, we cannot determine the type
+of the result, so the expression's type has a type variable.
+Since the expression is expansive, and the type variable is
+nongeneralizable, there is an error.
+
+<h3>Exercise 5.3.7(e)</h3>
+
+Legal.
+Variable <i>v</i> must have a single type, but since both arguments of
+<i>h</i> are integers, the type <tt>int list</tt> works for <i>v</i>.
+
+<h3>Exercise 5.3.7(g)</h3>
+
+Illegal.
+The type of <tt>nil::v</tt> is <tt>'a list list</tt>.
+We thus have a variable in the type of an expansive expression.
+<p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol5.html#top">Return to Top</a>
+</p><p>
+
+<a name="sol54"></a>
+</p><h2>Solutions for Section 5.4</h2>
+
+<h3>Exercise 5.4.1</h3>
+
+<pre>(* print a table with rows
+	x+i*delta, F(x+i*delta)
+for i = 0, 1,...,n-1 *)
+fun tabulate(x,delta,0,F) = ()
+|   tabulate(x,delta,n,F) = (
+	print(Real.toString(x));
+	print("\t");
+	print(Real.toString(F(x)));
+	print("\n");
+	tabulate(x+delta,delta,n-1,F)
+);
+</pre>
+
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/code/ex541.txt">Download this program</a><p>
+
+</p><h3>Exercise 5.4.3(a)</h3>
+
+<pre>fun trap(a,b,n,F) = 
+	if n&lt;=0 orelse b-a&lt;=0.0 then 0.0
+	else
+		let
+			val delta = (b-a)/real(n);
+			fun trap1(x,0) = 0.0
+			|   trap1(x,i) = delta*(F(x)+F(x+delta))/2.0
+					 + trap1(x+delta,i-1)
+		in
+			trap1(a,n)
+		end;
+</pre>
+
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/code/ex543.txt">Download this program</a><p>
+
+</p><h3>Exercise 5.4.5(a)</h3>
+
+<pre>     simpleMap(fn(x)=&gt;if x&lt;0.0 then 0.0 else x, L);
+</pre>
+
+<h3>Exercise 5.4.5(c)</h3>
+
+<pre>     simpleMap(fn(c)=&gt;if c&gt;=#"a" andalso c&lt;=#"z" then chr(ord(c)-32)
+                      else c,
+               L);
+</pre>
+
+<h3>Exercise 5.4.6(a)</h3>
+
+<pre>     reduce(fn(x,y)=&gt; if x&lt;y then y else x, L);
+</pre>
+
+<h3>Exercise 5.4.6(c)</h3>
+
+<pre>     reduce(op ^, L);
+</pre>
+
+<h3>Exercise 5.4.7(a)</h3>
+
+<pre>     filter(fn(x)=&gt;x&gt;0.0, L);
+</pre>
+
+<h3>Exercise 5.4.7(c)</h3>
+
+Here is a way to write a suitable anonymous function to do the job.
+Note the importance that the test for <tt>s=""</tt> is forced, by the
+<tt>orelse</tt>, to occur before the test that <tt>s</tt> does not begin with
+<tt>#"a"</tt>.
+If we could not rely on the order of the tests, we might accidently try
+to find the head of an empty list.
+
+<pre>     filter(fn(s)=&gt;not(s="" orelse hd(explode(s)) &lt;&gt; #"a"), L);
+</pre>
+
+Of course, one could define the desired test by a function with two
+patterns, such as:
+
+<pre>     fun init_a("") = false
+     |   init_a(s) = (hd(explode(s))=#"a");
+</pre>
+
+There is another, simpler way to write the function <tt>init_a</tt>,
+using the built-in function <tt>substring</tt> described in Section
+9.2.5:
+
+<pre>     fun init_a(s) = (substring(s,0,1) = "a");
+</pre>
+
+Notice that <tt>substring(s,0,1)</tt> extracts from string <i>s</i> the
+substring of length 1 beginning at position 0 (the initial position of
+the string).
+
+<h3>Exercise 5.4.9</h3>
+
+The following code works by looking for the first two elements of the
+list (if they exist), applying <tt>F</tt> to them to form one element, and
+recursively reducing the list with the first two elements replaced by
+one.
+
+<pre>     exception EmptyList;
+
+     fun lreduce(F,nil) = raise EmptyList
+     |   lreduce(F,[x]) = x
+     |   lreduce(F,x::y::zs) = lreduce(F, F(x,y)::zs);
+</pre>
+
+<h3>Exercise 5.4.11</h3>
+
+<pre>     fun reduceB(g,F,nil) = g
+     |   reduceB(g,F,x::xs) = F(x, reduceB(g,F,xs));
+</pre>
+
+<h3>Exercise 5.4.12(a)</h3>
+
+<pre>     reduceB(0,fn(x,y)=&gt;y+1, L);
+</pre>
+
+<h3>Exercise 5.4.12(b)</h3>
+
+<pre>     reduceB([nil],fn(x,y)=&gt;(x::hd(y))::y, L);
+</pre>
+
+That is, we compute the suffixes of the tail of a list <i>L</i>.
+We then take the first of the resulting suffixes and make a copy of it
+to which the head of <i>L</i> is prepended.
+This new suffix is the longest possible suffix and is prepended to the
+list of suffixes of the tail.
+
+<h3>Exercise 5.4.13(a)</h3>
+
+<pre>     fun eval(plus,times,[c],x) = c
+     |   eval(plus,times,c::cs,x) =
+             plus(c,times(x,eval(plus,times,cs,x)));
+<pre>
+<h3>Exercise 5.4.13(b)</h3>
+
+<pre>     eval(fn(x,y)=&gt;x+y, fn(x,y)=&gt;x*y, [1,2,3,4], 5);
+</pre>
+<p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol5.html#top">Return to Top</a>
+</p><p>
+
+<a name="sol55"></a>
+</p><h2>Solutions for Section 5.5</h2>
+
+<h3>Exercise 5.5.1</h3>
+
+<pre>     fun applyList nil _ = nil
+     |   applyList (F::Fs) a = F(a)::(applyList Fs a);
+</pre>
+
+<h3>Exercise 5.5.2</h3>
+
+<pre>     fun makeFnList F nil = nil
+     |   makeFnList F (x::xs) = F(x)::(makeFnList F xs);
+</pre>
+
+Notice that this function is equivalent to <tt>map</tt> of Section
+5.6.3.
+The fact that the result of <tt>F(x)</tt> is presumed to be a function
+is irrelevant.
+
+<h3>Exercise 5.5.3</h3>
+
+<pre>     (* ss1(L,M) tests whether list L is a prefix of list M *)
+     fun ss1(nil, _) = true
+     |   ss1(_, nil) = false
+     |   ss1(x::xs, y::ys) = (x=y andalso ss1(xs,ys));
+
+     (* ss2(L,M) tests whether list L is a sublist of list M *)
+     fun ss2(x, nil) = ss1(x,nil)
+     |   ss2(x, y::ys) = ss1(x,y::ys) orelse ss2(x,ys);
+
+     (* substring converts strings to lists and applies ss2 *)
+     fun substring x y = ss2(explode(x),explode(y));
+
+     val f = makeFnList(substring);
+
+     val [he, she, her, his] = f ["he", "she", "her", "his"];
+
+     applyList [he, she, her, his] "hershey";
+</pre>
+
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/code/ex553.txt">Download this program</a><p>
+
+</p><h3>Exercise 5.5.4</h3>
+
+The proper way to apply <i>f</i> is shown in the penultimate line of the code
+of Exercise 5.5.3.
+Function <i>f</i> is applied to a list of the four strings mentioned in
+Exercise 5.5.4.
+The result is a list of four functions; we have given these functions
+names equal to the strings that they search for.
+For instance, function <tt>he</tt> returns <tt>true</tt> when its
+argument is any string that contains an <tt>h</tt> followed by an
+<tt>e</tt> and returns <tt>false</tt> otherwise.
+
+<h3>Exercise 5.5.5</h3>
+
+The solution to this exercise is in the last line of the code for
+Exercise 5.5.3.
+The result is the list <tt>[true, true, true, false]</tt> since only
+<tt>"his"</tt> is not a substring of <tt>"hershey"</tt>.
+Note that it was not necessary to define the four functions <tt>he</tt>
+etc. at an intermediate step.
+We could have applied <i>f</i> directly, by
+
+<pre>     applyList (f ["he", "she", "her", "his"]) "hershey";
+</pre>
+
+<h3>Exercise 5.5.7(a)</h3>
+
+<tt>fun curry F x1 x2 ... x</tt><i>n</i>
+<tt>= F(x1,x2,...,x</tt><i>n</i><tt>)</tt>
+<p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol5.html#top">Return to Top</a>
+</p><p>
+
+<a name="sol56"></a>
+</p><h2>Solutions for Section 5.6</h2>
+
+<h3>Exercise 5.6.1(a)</h3>
+
+<pre>     val f = map real;
+</pre>
+
+<h3>Exercise 5.6.1(c)</h3>
+
+<pre>val f = (foldr (op ^) "") o (map str);
+</pre>
+
+Our solution is the composition of two functions.
+The first, <tt>map str</tt> converts a list of characters to a list of
+strings of length 1.
+The second, <tt>foldr (op ^) ""</tt> concatenates the list of strings
+produced by the first function.
+
+<h3>Exercise 5.6.1(e)</h3>
+
+<pre>     val f = foldr (op -) 0;
+</pre>
+
+<h3>Exercise 5.6.1(g)</h3>
+
+<pre>     val f = foldr (fn (x,y) =&gt; x orelse y) false;
+</pre>
+
+One might suspect that the following would work:
+
+<pre>     val f = foldr (op orelse) false;
+</pre>
+
+However, <tt>orelse</tt> is a shorthand for an if-then-else expression,
+and not a symbol that can be converted into a prefix operator.
+Thus, we had to define the desired (anonymous) function explicitly.
+
+<h3>Exercise 5.6.2</h3>
+
+Revised 3/9/02.
+<p>
+
+</p><pre>     fun foldl F y nil = y
+     |   foldl F y (x::xs) = foldl F (F(x,y)) xs;
+</pre>
+
+Notice how the recursive step combines the start value with the first
+element of the list to create a new start element, which is used to fold
+the tail of the list.
+
+<h3>Exercise 5.6.3(a)</h3>
+
+<tt>(int -&gt; string) -&gt; int -&gt; string</tt>.
+That is, both the domain and range types of <i>I</i> are functions from
+integers to strings.
+
+<h3>Exercise 5.6.4</h3>
+
+(a) Type = <tt>(int -&gt; 'a) -&gt; int -&gt; 'a</tt>.
+Function <tt>compA1</tt> takes as argument a function <i>F(x)</i> and produces a
+function <i>G(x)</i> such that <i>G(x)=F(x+1)</i>.
+Here, <i>x</i> must be an integer.
+Put another way, <tt>compA1</tt> turns a function <i>F(x)</i> into <i>F(x+1)</i>.
+<p>
+(b)
+Type = <tt>((int -&gt; 'a) -&gt; 'b) -&gt; (int -&gt; 'a) -&gt; 'b</tt>.
+The function <tt>compCompA1</tt> takes a function <i>F</i> and turns it into
+<tt>F o compA1</tt>.
+</p><p>
+(c)
+Type = <tt>int -&gt; int</tt>.
+Function <tt>f</tt> is defined by <i>f(x)=x+2</i>.
+The explanation is that <tt>compA1</tt> turns any <i>F(x)</i> into <i>F(x+1)</i>, so
+if <i>F</i> is <tt>add1</tt>, <i>f(x)</i> will be <i>add1(x+1)</i>, or
+<i>x+2</i>.
+</p><p>
+(d)
+Type = <tt>int</tt>, and <i>f(2)=4</i>.
+</p><p>
+(e)
+Type = <tt>(int -&gt; 'a) -&gt; int -&gt; 'a</tt>.
+Function <tt>g</tt> takes its argument function <i>F(x)</i> and produces the
+function <i>F(x+2)</i>.
+</p><p>
+(f)
+Type = <tt>int -&gt; int</tt>.
+Function <tt>h</tt> takes integer <i>x</i> and produces <i>x+3</i>.
+</p><p>
+(g)
+Type = <tt>int</tt>, and <i>h(2)=5</i>.
+</p><p>
+<a href="http://infolab.stanford.edu/~ullman/emlpsols/sol5.html#top">Return to Top</a>
+
+
+
+</p></pre></pre></pre></pre></div></body></html>
