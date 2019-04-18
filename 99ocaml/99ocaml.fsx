@@ -150,7 +150,34 @@ let drop_no_backtracking (l:list<'t>) n :seq<'t> =
 
 drop_no_backtracking ["a";"b";"c";"d";"e";"f";"g";"h";"i";"j"] 3;;
 
+//18
+let slice list l r = List.skip l list |> List.take (r-l+1)
+
+slice ["a";"b";"c";"d";"e";"f";"g";"h";"i";"j"] 2 6;;
+
+//19
+let rec cat = function
+    ([], y) -> y
+    | (x::xs, y) -> x :: cat (xs, y)
+
+let rec skip = function
+    ([], _) -> []
+    | (_::xs as xs1, c) -> if c > 0 then skip(xs, c - 1) else xs1
+
+let rec take = function
+    ([], _) -> []
+    | (x::xs, c) -> if c > 0 then x :: take(xs, c - 1) else []
+
+let cycle l i =
+    cat (skip (l, i), take (l, i))
+    
+take (["a"; "b"; "c"; "d"; "e"; "f"; "g"; "h"], 1);;
+
+cycle ["a"; "b"; "c"; "d"; "e"; "f"; "g"; "h"] 3;;
+cycle ["a"; "b"; "c"; "d"; "e"; "f"; "g"; "h"] (-2);;
+
 //26
+
 
 
 //57
