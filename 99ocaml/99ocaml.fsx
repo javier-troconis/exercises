@@ -1,3 +1,6 @@
+open System.Xml.Xsl
+open System.Collections.Generic
+open System.Collections
 //1
 let rec last = function
     | [] -> None
@@ -124,6 +127,30 @@ let rec decode = function
     | Many (c,x)::xs -> if c > 2 then x :: decode (Many (c-1,x)::xs) else x::x::decode xs
 
 decode [Many (4,"a"); One "b"; Many (2,"c"); Many (2,"a"); One "d"; Many (4,"e")];;
+
+//16
+let drop l n =
+    let rec drop c = function
+        [] -> []
+        | x::xs -> if n > c then x::drop (c+1) xs else drop 1 xs
+    drop 1 l
+
+drop ["a";"b";"c";"d";"e";"f";"g";"h";"i";"j"] 3;;
+
+let drop_no_backtracking (l:list<'t>) n :seq<'t> =
+    let rec drop_no_backtracking (r:Queue<'t>) c = function
+        [] -> r
+        | x::xs -> 
+            if n > c 
+            then 
+                r.Enqueue(x)
+                drop_no_backtracking r (c+1) xs
+            else drop_no_backtracking r 1 xs
+    drop_no_backtracking (new Queue<'t>()) 1 l :> seq<'t>
+
+drop_no_backtracking ["a";"b";"c";"d";"e";"f";"g";"h";"i";"j"] 3;;
+
+//26
 
 
 //57
