@@ -201,19 +201,19 @@ insert_at "alfa" 4 ["a";"b";"c";"d"];;
 //23
 //revise
 let rand_select l n =
-    let get_rnd_idx n max =
+    let get_random_numbers n max =
         let rnd = System.Random()
-        let rec get_rnd_idx c = if n > c then rnd.Next max :: get_rnd_idx (c + 1) else []
-        get_rnd_idx 0
-    let get_nth i l =
-        let rec get_nth c = function
-            [] -> raise (System.Exception "")
-            | x::xs -> if c = i then x else get_nth (c + 1) xs
-        get_nth 0 l
+        let rec get_random_numbers c = if n > c then rnd.Next max :: get_random_numbers (c + 1) else []
+        get_random_numbers 0
+    let get_nth_element i l =
+        let rec get_nth_element c = function
+            [] -> raise (System.Exception "not found")
+            | x::xs -> if c = i then x else get_nth_element (c + 1) xs
+        get_nth_element 0 l
     let rec rand_select = function
         [] -> []
-        | x::xs -> get_nth x l :: rand_select xs
-    rand_select (get_rnd_idx n (List.length l))
+        | x::xs -> get_nth_element x l :: rand_select xs
+    rand_select (get_random_numbers n (List.length l))
 
 rand_select ["a";"b";"c";"d";"e";"f";"g";"h"] 3;;
 
