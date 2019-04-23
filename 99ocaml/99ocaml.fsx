@@ -1,6 +1,7 @@
 open System.Xml.Xsl
 open System.Collections.Generic
 open System.Collections
+open System
 //1
 let rec last = function
     | [] -> None
@@ -204,11 +205,15 @@ let rand_select l n =
         let rnd = System.Random()
         let rec get_rnd_idx c = if n > c then rnd.Next max :: get_rnd_idx (c + 1) else []
         get_rnd_idx 0
-    let rec rand_select c = function
-        ([],_) -> []
-        | (_,[]) -> []
-        | (x::xs, y::ys) -> if c = x then y::rand_select (c+1) (xs, ys) else rand_select (c+1) (x::xs, ys)
-    rand_select 0 (get_rnd_idx n (List.length l), l)
+    let get_nth i l =
+        let rec get_nth c = function
+            [] -> raise (System.Exception "")
+            | x::xs -> if c = i then x else get_nth (c + 1) xs
+        get_nth 0 l
+    let rec rand_select = function
+        [] -> []
+        | x::xs -> get_nth x l :: rand_select xs
+    rand_select (get_rnd_idx n (List.length l))
 
 rand_select ["a";"b";"c";"d";"e";"f";"g";"h"] 3;;
 
