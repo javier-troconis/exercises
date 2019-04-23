@@ -176,8 +176,41 @@ take (["a"; "b"; "c"; "d"; "e"; "f"; "g"; "h"], 1);;
 cycle ["a"; "b"; "c"; "d"; "e"; "f"; "g"; "h"] 3;;
 cycle ["a"; "b"; "c"; "d"; "e"; "f"; "g"; "h"] (-2);;
 
-//26
+//20 
+let remove_at n l =
+    let rec remove_at c = function
+        [] -> []
+        | x::xs -> if c = n then xs else x::remove_at (c+1) xs
+    remove_at 0 l
 
+remove_at 1 ["a";"b";"c";"d"];;
+
+//21 
+let insert_at e i l =
+    let rec insert_at c = function
+        [] -> [e]
+        | x::xs -> 
+            if c = i then e::x::xs else x::insert_at (c+1) xs
+    insert_at 0 l
+
+insert_at "alfa" 1 ["a";"b";"c";"d"];;
+insert_at "alfa" 3 ["a";"b";"c";"d"];;
+insert_at "alfa" 4 ["a";"b";"c";"d"];;
+
+//23
+//revise
+let rand_select l n =
+    let get_rnd_idx n max =
+        let rnd = System.Random()
+        let rec get_rnd_idx c = if n > c then rnd.Next max :: get_rnd_idx (c + 1) else []
+        get_rnd_idx 0
+    let rec rand_select c = function
+        ([],_) -> []
+        | (_,[]) -> []
+        | (x::xs, y::ys) -> if c = x then y::rand_select (c+1) (xs, ys) else rand_select (c+1) (x::xs, ys)
+    rand_select 0 (get_rnd_idx n (List.length l), l)
+
+rand_select ["a";"b";"c";"d";"e";"f";"g";"h"] 3;;
 
 
 //57
