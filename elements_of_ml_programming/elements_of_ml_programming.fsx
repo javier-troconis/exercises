@@ -374,29 +374,65 @@ let split_evenly l = List.fold (fun (l1, l2) x -> (l2, x :: l1)) ([], []) l
 
 split_evenly [ 1; 2; 3; 4 ]
 
-
-
 type expr =
-    Cst of int
+    | Cst of int
     | Var of string
     | Let of string * expr * expr
     | Expr of string * expr * expr
 
-let rec find y = function
-    [] -> raise (System.Exception "variable not found")
-    | (k, v)::xs -> if k = y then v else find y xs
+let rec find y =
+    function
+    | [] -> raise (System.Exception "variable not found")
+    | (k, v) :: xs ->
+        if k = y then v
+        else find y xs
 
 let rec eval env =
     function
-    Cst x -> x
+    | Cst x -> x
     | Var x -> find x env
-    | Let (variable_name, e1, e2) -> 
+    | Let(variable_name, e1, e2) ->
         let variable_value = eval env e1
-        eval ((variable_name, variable_value)::env) e2
+        eval ((variable_name, variable_value) :: env) e2
     | Expr(operator, e1, e2) ->
         match operator with
-        "+" -> (+) (eval env e1) (eval env e2)
+        | "+" -> (+) (eval env e1) (eval env e2)
         | "-" -> (-) (eval env e1) (eval env e2)
         | _ -> raise (System.Exception "unknown operator")
 
-eval [("x", 2)] (Let ("x", Var "x", (Expr ("-", Cst 1, Var "x"))))
+eval [ ("x", 2) ] (Let("x", Var "x", (Expr("-", Cst 1, Var "x"))))
+
+type Money = int
+type Subscription<'a,'b,'c> = 
+    | A of 'a
+    | B of 'b * 'c
+
+type Tp = Subscription<int,int,int> -> int
+
+let p = function
+    | A x -> x
+    | B (x1, x2) -> x1 + x2
+
+let f:Tp = p
+
+f (B (1,2))
+
+
+let rec sum f = function
+ | [] -> f 0
+ | x::x1 -> sum ((+) (f x)) x1
+
+let rec sum1 = function
+ | [] -> 0
+ | x::x1 -> x + sum1 x1
+
+let rec sum2 n = function
+ | [] -> n
+ | x::x1 -> sum2 (x + n) x1
+
+sum id [1..100000]
+
+sum1 [1..100000]
+
+
+

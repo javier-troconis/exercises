@@ -1,7 +1,5 @@
 
 let x (a,b,c) = ((if a > b then (if a > c then a else c) else (if b > c then b else c)), (if a < b then (if a < c then a else c) else (if b < c then b else c)))
-open System.Windows.Forms
-
 
 let rec x = function
     | [] -> []
@@ -241,6 +239,43 @@ let t = Node("ml",
 isBsn t
 
 searchBsn (fun (t1, t2) -> t1 > t2) t "ml"
+
+type 't Result = 
+    | Ok of 't
+    | Error of string
+
+let bind f = function
+    | Ok t -> f t
+    | Error _ as error -> error 
+
+let map f = function
+    | Ok t -> Ok (f t)
+    | Error _ as error -> error 
+
+let (|>>) x f = bind f x
+let (|>>>) x f = map f x
+
+let s1 (s:string) = if String.length s % 2 = 0 then Ok s else Error "odd"
+let s2 (s:string) = s
+
+Ok "3" |>> s1
+
+"1" |> s1 |>>> s2 |>> s1
+
+let sum_cps n = 
+    let rec f f' = function
+    | 0 -> f' 0
+    | n1 -> f (fun n2 -> f' (n1 - n2)) (n1 - 1)
+    f id n
+
+let sum n = 
+    let rec f r = function
+    | 0 -> r
+    | n -> f (n + r) (n - 1)
+    f 0 n
+
+sum_cps 2
+
 
 
 
