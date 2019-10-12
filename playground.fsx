@@ -277,7 +277,86 @@ let sum n =
 sum_cps 2
 
 
+let rec cumsum c f = function
+ | [] -> f []
+ | x::x1 -> cumsum (x + c) (fun x2 -> f ((x + c)::x2)) x1
+
+cumsum 0 id [1;2;3;4;5;6]
+
+let rec foldl f s = function
+ | [] -> s
+ | x::x1 -> foldl f (f s x) x1
+
+let rec foldr f l s =
+    match l with
+    | [] -> s
+    | x::x1 -> f x (foldr f x1 s)
+
+let rec foldr1 fc f l s =
+    match l with
+    | [] -> fc s
+    | x::x1 -> foldr1 (fun s1 -> fc (f x s1)) f x1 s
+
+foldl (fun s i -> i::s) [] [1..1000000]
+foldr (fun i s -> i::s) [1..1000000] [] 
+foldr1 id (fun i s -> i::s) [1..100000000] [] 
+List.foldBack (fun i s -> i::s) [1..100000000] [] 
 
 
+let rec convert_to_system (symbols:string[]) n = 
+    if (n > Array.length symbols - 1)
+    then 
+        let q = n / Array.length symbols
+        let r = n % Array.length symbols
+        convert_to_system symbols q + symbols.[r]
+    else 
+        symbols.[n]
+    
+convert_to_system [|"0";"1"|] 3
 
 
+Seq.foldBack (fun e s -> e::s) "ab" []
+
+type Step<'t> = 
+    | Empty
+    | Condition of string * ('t -> bool) * Step<'t> * Step<'t>
+    | Activity of string * ('t -> 't) * Step<'t>
+
+let findStepBFS<'t> step index =
+    let queue = new System.Collections.Generic.Queue<Step<'t> * int>()
+    let mutable result = Empty
+    queue.Enqueue (step, 0)
+    while queue.Count > 0 do
+        let (step', index') = queue.Dequeue()
+        if index = index' 
+            then 
+                result <- step'
+                queue.Clear()
+            else
+                match step' with
+                | Empty -> ()
+                | Condition (_, _, l, r) -> 
+                    queue.Enqueue (l, index' + queue.Count + 1)
+                    queue.Enqueue (r, index' + queue.Count + 1)
+                | Activity (_, _, n) ->
+                    queue.Enqueue (n, index' + queue.Count + 1)
+    result
+
+let rec evaluateStep state = function 
+    | Empty -> (state, Empty)
+    | Condition (_, f, l, r) -> if f state then evaluateStep state l else evaluateStep state r
+    | Activity (_, f, n) -> (f state, n)
+
+let rec evaluateStepPath state step index =
+    match findStepBFS step index with
+    | Empty -> state
+    | step ->
+        let (state, step) = evaluateStep state step 
+        evaluateStepPath state step 0
+
+let rec step1 = Condition ("0", (fun s -> s <= 9), 
+                            Activity("1", (+) 1, 
+                                step1),
+                            Empty)
+
+evaluateStepPath 0 step1 0
