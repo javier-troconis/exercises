@@ -327,13 +327,13 @@ let findStepBFS<'t> step index =
     let mutable result = Empty
     queue.Enqueue (step, 0)
     while queue.Count > 0 do
-        let (step', index') = queue.Dequeue()
+        let (step, index') = queue.Dequeue()
         if index = index' 
             then 
-                result <- step'
+                result <- step
                 queue.Clear()
             else
-                match step' with
+                match step with
                 | Empty -> ()
                 | Condition (_, _, l, r) -> 
                     queue.Enqueue (l, index' + queue.Count + 1)
@@ -342,13 +342,33 @@ let findStepBFS<'t> step index =
                     queue.Enqueue (n, index' + queue.Count + 1)
     result
 
+let findStepDFS<'t> step index = 
+    let rec findStepDFS step index' :(Step<'t> * int) =
+        match step with
+        | Empty -> (Empty, index')
+        | Condition (_, _, l, r) -> 
+            if index = index'
+                then (step, index')
+                else
+                    match findStepDFS l (index' + 1) with
+                    | (Empty, index') -> findStepDFS r (index' + 1)
+                    | l -> l
+        | Activity (_, _, n) ->
+            if index = index'
+                then (step, index')
+                else 
+                    findStepDFS n (index' + 1)
+    let (step, _) = findStepDFS step 0
+    step
+
+
 let rec evaluateStep state = function 
     | Empty -> (state, Empty)
     | Condition (_, f, l, r) -> if f state then evaluateStep state l else evaluateStep state r
     | Activity (_, f, n) -> (f state, n)
 
 let rec evaluateStepPath state step index =
-    match findStepBFS step index with
+    match findStep_BFS_Preorder step index with
     | Empty -> state
     | step ->
         let (state, step) = evaluateStep state step 
@@ -358,5 +378,7 @@ let rec step1 = Condition ("0", (fun s -> s <= 9),
                             Activity("1", (+) 1, 
                                 step1),
                             Empty)
+
+findStepDFS step1 1000
 
 evaluateStepPath 0 step1 0
