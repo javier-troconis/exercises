@@ -67,3 +67,27 @@ let ``3.1.2.a`` a b c = if a > b
 //3.1.3.a 8
 //3.1.3.b 11
 //3.1.3.e 18
+let rec ``3.2.1.a`` x = if x > 1 then x * ``3.2.1.a`` (x - 1) else 1
+let rec ``3.2.1.b`` i l = if i = 0 then l else ``3.2.1.b`` (i - 1) (``3.1.1.f`` l)
+let rec ``3.2.1.c`` l = if List.isEmpty l then l else List.head l ::  List.head l :: ``3.2.1.c`` (List.tail l)
+let rec ``3.2.1.d`` l = if List.isEmpty l then 0 else 1 + ``3.2.1.d`` (List.tail l)
+let rec ``3.2.1.f_backtracking`` l = 
+                        if List.isEmpty (List.tail l) 
+                        then List.head l 
+                        else 
+                            let x = List.head l
+                            let y = ``3.2.1.f_backtracking`` (List.tail l)
+                            if x > y then x else y
+let rec ``3.2.1.f_no_backtracking`` l = 
+                        if List.isEmpty (List.tail l) 
+                        then List.head l 
+                        else 
+                            let x = List.head l
+                            let y = List.head (List.tail l)
+                            if x > y 
+                            then ``3.2.1.f_no_backtracking`` (x :: List.tail (List.tail l)) 
+                            else ``3.2.1.f_no_backtracking`` (List.tail l) 
+//3.2.2 because c+1
+//3.2.3.a b and c are int
+//3.2.3.c all are int
+//3.2.3.f b and c are int
