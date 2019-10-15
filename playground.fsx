@@ -368,7 +368,7 @@ let rec evaluateStep state = function
     | Activity (_, f, n) -> (f state, n)
 
 let rec evaluateStepPath state step index =
-    match findStep_BFS_Preorder step index with
+    match findStepBFS step index with
     | Empty -> state
     | step ->
         let (state, step) = evaluateStep state step 
