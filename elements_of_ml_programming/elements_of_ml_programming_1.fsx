@@ -1,4 +1,11 @@
 let explode (x:char seq) = Seq.foldBack (fun e s -> e::s) x []
+let rec merge = function
+    | ([], a) -> a
+    | (a, []) -> a
+    | ((a::a1 as a2), (b::b1 as b2)) -> 
+        if a > b
+        then b :: merge (a2, b1)
+        else a :: merge (a1, b2)
 
 //2.1.1.a 7
 //2.1.1.c 2
@@ -87,7 +94,25 @@ let rec ``3.2.1.f_no_backtracking`` l =
                             if x > y 
                             then ``3.2.1.f_no_backtracking`` (x :: List.tail (List.tail l)) 
                             else ``3.2.1.f_no_backtracking`` (List.tail l) 
-//3.2.2 because c+1
+//3.2.2 because of c+1
 //3.2.3.a b and c are int
 //3.2.3.c all are int
 //3.2.3.f b and c are int
+let rec ``3.3.1.a`` = function 
+    | 1 -> 1 
+    | x -> x * ``3.3.1.a`` (x - 1)
+let rec ``3.3.1.d`` = function
+    | [] -> []
+    | x1::x2 -> x1::x1::``3.3.1.d`` x2
+let rec ``3.3.1.f`` = function
+    | [] -> failwith "empty list"
+    | [x] -> x
+    | x1::x2::x3 -> if x1 > x2 then ``3.3.1.f`` (x1::x3) else ``3.3.1.f`` (x2::x3)
+//3.3.5.a yes, x=a, y=b, zs=[c], w=[d;e]
+//3.3.5.c no
+let rec ``3.3.7`` = function
+    | 0 -> 0
+    | x -> 2 * x - 1 + ``3.3.7`` (x - 1)
+let rec ``3.3.8`` = function
+    | [] -> []
+    | ((x1, x2) as x3)::x4 -> if x1 > x2 then (x2, x1)::``3.3.8`` x4 else x3::``3.3.8`` x4
