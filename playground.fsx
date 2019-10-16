@@ -384,21 +384,26 @@ findStepDFS step1 1000
 evaluateStepPath 0 step1 0
 
 
-type Expr<'t> =
-    | Cst of 't
+type Expr =
+    | Cst of int
     | Var of string
-    | Sum of Expr<'t> * Expr<'t>
-    | Sub of Expr<'t> * Expr<'t>
+    | Let of string * Expr * Expr
+    | Sum of Expr * Expr
+    | Sub of Expr * Expr
 
-let rec lookup env x =
+let rec lookup env key =
     match env with
-    | [] -> failwith (sprintf "variable %s not found" x)
-    | (k, v)::kvs -> if k = x then v else lookup kvs x
+    | [] -> failwith (sprintf "variable %s not found" key)
+    | (k, v)::kvs -> if k = key then v else lookup kvs key
 
 let rec evaluate expr env =
     match expr with
-    | Cst x -> x
-    | Var x -> lookup env x
+    | Cst v -> v
+    | Var k -> lookup env k
+    | Let (k, v, expr1) -> 
+        let v1 = evaluate v env
+        let env1 = (k, v1)::env
+        evaluate expr1 env1
     | Sum (expr1, expr2) -> evaluate expr1 env + evaluate expr2 env
     | Sub (expr1, expr2) -> evaluate expr1 env - evaluate expr2 env
 
