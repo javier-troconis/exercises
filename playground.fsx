@@ -382,3 +382,26 @@ let rec step1 = Condition ("0", (fun s -> s <= 9),
 findStepDFS step1 1000
 
 evaluateStepPath 0 step1 0
+
+
+type Expr<'t> =
+    | Cst of 't
+    | Var of string
+    | Sum of Expr<'t> * Expr<'t>
+    | Mod of Expr<'t> * Expr<'t>
+
+let rec lookup env x =
+    match env with
+    | [] -> failwith (sprintf "variable %s not found" x)
+    | (k, v)::kvs -> if k = x then v else lookup kvs x
+
+let rec evaluate expr env =
+    match expr with
+    | Cst x -> x
+    | Var x -> lookup env x
+    | Sum (expr1, expr2) -> evaluate expr1 env + evaluate expr2 env
+    | Mod (expr1, expr2) -> evaluate expr1 env % evaluate expr2 env
+
+let env = [("a", 1); ("b", 2)]
+let expr = Mod (Sum (Var "a", Var "b"),  Cst 2)
+evaluate expr env
