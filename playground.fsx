@@ -407,6 +407,8 @@ let rec evaluate expr env =
     | Sum (expr1, expr2) -> evaluate expr1 env + evaluate expr2 env
     | Sub (expr1, expr2) -> evaluate expr1 env - evaluate expr2 env
 
-let env = [("a", 1); ("b", 2)]
-let expr = Sub (Sum (Var "a", Var "b"),  Cst 2)
+let env = [("a", 1)]
+let expr = Sub (
+                Sum (Cst 2, Let ("a", Cst 2, Var "a")),  
+                Var "a")
 evaluate expr env
