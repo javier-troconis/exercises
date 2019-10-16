@@ -391,23 +391,18 @@ type Expr =
     | Sum of Expr * Expr
     | Sub of Expr * Expr
 
-let rec lookup env key =
-    match env with
-    | [] -> failwith (sprintf "variable %s not found" key)
-    | (k, v)::kvs -> if k = key then v else lookup kvs key
-
 let rec evaluate expr env =
     match expr with
     | Cst v -> v
-    | Var k -> lookup env k
+    | Var k -> Map.find k env
     | Let (k, v, expr) -> 
         let v1 = evaluate v env
-        let env1 = (k, v1)::env
+        let env1 = Map.add k v1 env
         evaluate expr env1
     | Sum (expr1, expr2) -> evaluate expr1 env + evaluate expr2 env
     | Sub (expr1, expr2) -> evaluate expr1 env - evaluate expr2 env
 
-let env = [("a", 1)]
+let env = Map.ofList [ ("a", 1) ]
 let expr = Sub (
                 Sum (Cst 2, Let ("a", Cst 2, Var "a")),  
                 Var "a")

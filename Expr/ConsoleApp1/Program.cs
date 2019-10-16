@@ -35,11 +35,7 @@ namespace ConsoleApp1
 
         public int Evaluate(IDictionary<string, int> env)
         {
-            if(!env.TryGetValue(_key, out var value))
-            {
-                throw new NotImplementedException($"variable {_key} not found");
-            }
-            return value;
+            return env[_key];
         }
     }
 
