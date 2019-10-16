@@ -388,7 +388,7 @@ type Expr<'t> =
     | Cst of 't
     | Var of string
     | Sum of Expr<'t> * Expr<'t>
-    | Mod of Expr<'t> * Expr<'t>
+    | Sub of Expr<'t> * Expr<'t>
 
 let rec lookup env x =
     match env with
@@ -399,9 +399,9 @@ let rec evaluate expr env =
     match expr with
     | Cst x -> x
     | Var x -> lookup env x
-    | Sum (expr1, expr2) -> evaluate expr1 env + evaluate expr2 env
-    | Mod (expr1, expr2) -> evaluate expr1 env % evaluate expr2 env
+    | Sum (expr1, expr2) -> (+) (evaluate expr1 env) (evaluate expr2 env)
+    | Sub (expr1, expr2) -> (-) (evaluate expr1 env) (evaluate expr2 env)
 
 let env = [("a", 1); ("b", 2)]
-let expr = Mod (Sum (Var "a", Var "b"),  Cst 2)
+let expr = Sub (Sum (Var "a", Var "b"),  Cst 2)
 evaluate expr env
