@@ -400,10 +400,10 @@ let rec evaluate expr env =
     match expr with
     | Cst v -> v
     | Var k -> lookup env k
-    | Let (k, v, expr1) -> 
+    | Let (k, v, expr) -> 
         let v1 = evaluate v env
         let env1 = (k, v1)::env
-        evaluate expr1 env1
+        evaluate expr env1
     | Sum (expr1, expr2) -> evaluate expr1 env + evaluate expr2 env
     | Sub (expr1, expr2) -> evaluate expr1 env - evaluate expr2 env
 

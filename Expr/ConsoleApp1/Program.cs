@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ConsoleApp1
 {
-    public interface Expr
+    public interface IExpr
     {
         int Evaluate(IDictionary<string, int> env);
     }
 
-    public class Cst : Expr
+    public class Cst : IExpr
     {
         private readonly int _value;
 
@@ -23,7 +24,7 @@ namespace ConsoleApp1
         }
     }
 
-    public class Var : Expr
+    public class Var : IExpr
     {
         private readonly string _key;
 
@@ -42,12 +43,12 @@ namespace ConsoleApp1
         }
     }
 
-    public class Sum : Expr
+    public class Sum : IExpr
     {
-        private readonly Expr _expr1;
-        private readonly Expr _expr2;
+        private readonly IExpr _expr1;
+        private readonly IExpr _expr2;
 
-        public Sum(Expr expr1, Expr expr2)
+        public Sum(IExpr expr1, IExpr expr2)
         {
             _expr1 = expr1;
             _expr2 = expr2;
@@ -59,12 +60,12 @@ namespace ConsoleApp1
         }
     }
 
-    public class Sub : Expr
+    public class Sub : IExpr
     {
-        private readonly Expr _expr1;
-        private readonly Expr _expr2;
+        private readonly IExpr _expr1;
+        private readonly IExpr _expr2;
 
-        public Sub(Expr expr1, Expr expr2)
+        public Sub(IExpr expr1, IExpr expr2)
         {
             _expr1 = expr1;
             _expr2 = expr2;
@@ -76,12 +77,35 @@ namespace ConsoleApp1
         }
     }
 
+    public class Let : IExpr
+    {
+        private readonly string _key;
+        private readonly IExpr _value;
+        private readonly IExpr _expr;
+
+        public Let(string key, IExpr value, IExpr expr)
+        {
+            _key = key;
+            _value = value;
+            _expr = expr;
+        }
+
+        public int Evaluate(IDictionary<string, int> env)
+        {
+            var v1 = _value.Evaluate(env);
+            var env1 = new Dictionary<string, int>(env) {[_key] = v1};
+            return _expr.Evaluate(env1);
+        }
+    }
+
     class Program
     {
         static void Main(string[] args)
         {
-            var env = new Dictionary<string, int> { ["a"] = 1, ["b"] = 2 };
-            var expr = new Sub(new Sum(new Var("a"), new Var("b")), new Cst(2));
+            var env = new Dictionary<string, int> { ["a"] = 1 };
+            var expr = new Sub(
+                new Sum(new Cst(2), new Let("a", new Cst(2), new Var("a"))), 
+                new Var("a"));
             Console.WriteLine(expr.Evaluate(env));
         }
     }
