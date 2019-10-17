@@ -6,7 +6,13 @@ let rec merge = function
         if a > b
         then b :: merge (a2, b1)
         else a :: merge (a1, b2)
-
+let rec split = function
+    | [] -> ([], [])
+    | [x] -> ([x], [])
+    | x1::x2::x3 -> 
+        let (x4, x5) = split x3
+        (x1::x4, x2::x5)
+        
 //2.1.1.a 7
 //2.1.1.c 2
 //2.1.1.e false
@@ -116,3 +122,10 @@ let rec ``3.3.7`` = function
 let rec ``3.3.8`` = function
     | [] -> []
     | ((x1, x2) as x3)::x4 -> if x1 > x2 then (x2, x1)::``3.3.8`` x4 else x3::``3.3.8`` x4
+let rec ``3.3.11.c`` x = function
+    | [] -> [x]
+    | x1::x2 as x3 -> if x1 = x then x3 else x1::``3.3.11.c`` x x2
+let rec ``3.3.12`` x = function
+    | [] -> []
+    | x1::x2 -> (x::x1)::``3.3.12`` x x2
+
