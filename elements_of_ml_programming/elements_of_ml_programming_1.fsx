@@ -1,18 +1,26 @@
 let explode (x:char seq) = Seq.foldBack (fun e s -> e::s) x []
 let rec merge = function
-    | ([], a) -> a
-    | (a, []) -> a
-    | ((a::a1 as a2), (b::b1 as b2)) -> 
-        if a > b
-        then b :: merge (a2, b1)
-        else a :: merge (a1, b2)
+    | ([], x) -> x
+    | (x, []) -> x
+    | ((x1::x2 as x3), (x4::x5 as x6)) -> 
+        if x1 > x4
+        then x4 :: merge (x3, x5)
+        else x1 :: merge (x2, x6)
 let rec split = function
     | [] -> ([], [])
     | [x] -> ([x], [])
     | x1::x2::x3 -> 
         let (x4, x5) = split x3
         (x1::x4, x2::x5)
-        
+let rec mergesort = function
+    | [] -> []
+    | [x] -> [x]
+    | x -> 
+        let (x1, x2) = split x
+        let x1 = mergesort(x1)
+        let x2 = mergesort(x2)
+        merge (x1, x2)
+
 //2.1.1.a 7
 //2.1.1.c 2
 //2.1.1.e false
@@ -128,4 +136,14 @@ let rec ``3.3.11.c`` x = function
 let rec ``3.3.12`` x = function
     | [] -> []
     | x1::x2 -> (x::x1)::``3.3.12`` x x2
-
+let rec ``3.3.13`` = function 
+    | [] -> [[]]
+    | x1::x2  -> 
+        let x3 = ``3.3.13`` x2
+        x3 @ ``3.3.12`` x1 x3
+let ``3.4.1`` x = 
+    let x5 = x * x * x * x * x
+    let x25 = x5 * x5 * x5 * x5 * x5
+    let x100 = x25 * x25 * x25 * x25
+    let x500 = x100 * x100 * x100 * x100 * x100
+    x500 * x500
