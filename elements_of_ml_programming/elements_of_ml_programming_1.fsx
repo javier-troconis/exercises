@@ -20,6 +20,11 @@ let rec mergesort = function
         let x1 = mergesort(x1)
         let x2 = mergesort(x2)
         merge (x1, x2)
+let reverse x =
+    let rec reverse acc = function
+    | [] -> acc
+    | x1::x2 -> reverse (x1::acc) x2
+    reverse [] x
 
 //2.1.1.a 7
 //2.1.1.c 2
@@ -147,3 +152,22 @@ let ``3.4.1`` x =
     let x100 = x25 * x25 * x25 * x25
     let x500 = x100 * x100 * x100 * x100 * x100
     x500 * x500
+let rec ``3.4.5`` x = function
+    | 0 -> x
+    | i -> 
+        let x1 = ``3.4.5`` x (i - 1)
+        x1 * x1
+let rec ``3.4.7`` = function
+    | [] -> (0, 0)
+    | [x] -> (x, 0)
+    | x1::x2::x3 -> 
+        let (x4, x5) = ``3.4.7`` x3
+        (x1 + x4, x2 + x5)
+let ``3.5.1_no_backtracking`` x =
+    let rec ``3.5.1`` f = function
+    | ([], x) -> f x
+    | (x1::x2, x3) ->  ``3.5.1`` (fun x4 -> f (x1::x4)) (x2, x3)
+    ``3.5.1`` id x
+let rec ``3.5.1_backtracking`` = function
+    | ([], x) -> x
+    | (x1::x2, x3) ->  x1 :: ``3.5.1_backtracking`` (x2, x3)
