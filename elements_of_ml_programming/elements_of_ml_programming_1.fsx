@@ -25,6 +25,24 @@ let reverse x =
     | [] -> acc
     | x1::x2 -> reverse (x1::acc) x2
     reverse [] x
+let concat x =
+    let rec concat f = function
+    | ([], x) -> f x
+    | (x1::x2, x3) ->  concat (fun x4 -> f (x1::x4)) (x2, x3)
+    concat id x
+let rec skip = function
+    | ([], _) -> []
+    | ((_::x2 as x3), i) -> if i >= 1 then skip (x2, i - 1) else x3
+let take (l, i) =
+    let rec take f (l, i) =
+        if i >= 1
+        then
+            match l with
+            | x1::x2 -> take (fun x3 -> f (x1::x3)) (x2, i - 1) 
+            | x -> f x
+        else 
+            f []
+    take id (l, i)
 
 //2.1.1.a 7
 //2.1.1.c 2
@@ -171,3 +189,5 @@ let ``3.5.1_no_backtracking`` x =
 let rec ``3.5.1_backtracking`` = function
     | ([], x) -> x
     | (x1::x2, x3) ->  x1 :: ``3.5.1_backtracking`` (x2, x3)
+let ``3.5.2`` (l, i) =
+    concat (skip (l, i),  take(l, i))
