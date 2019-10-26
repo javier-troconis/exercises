@@ -191,3 +191,22 @@ let rec ``3.5.1_backtracking`` = function
     | (x1::x2, x3) ->  x1 :: ``3.5.1_backtracking`` (x2, x3)
 let ``3.5.2`` (l, i) =
     concat (skip (l, i),  take(l, i))
+//4.1.1 no
+let ``4.3.1`` n = 
+    let rec ``4.3.1`` n =
+        if n >= 1
+        then
+            let r = ``4.3.1`` (n - 1) 
+            r + r
+        else
+            "x"
+    printfn "%s" (``4.3.1`` n)
+let ``4.3.1_1`` n = 
+    let rec ``4.3.1`` r n =
+        if n >= 1
+        then
+            ``4.3.1`` (r + r) (n - 1)
+        else
+            r
+    printfn "%s" (``4.3.1`` "x" n)
+
