@@ -209,4 +209,14 @@ let ``4.3.1_1`` n =
         else
             r
     printfn "%s" (``4.3.1`` "x" n)
-
+let ``5.1.4.a`` e f = match e with | true -> true | false -> f
+let ``5.1.4.b`` e f = match e with | true -> f | false -> false
+let rec ``5.4.9`` f = function
+    | [] -> failwith "empty list"
+    | [x] -> x
+    | x1::x2::x3 -> ``5.4.9`` f (f x1 x2::x3)
+let rec ``5.4.11`` s f = function
+    | [] -> s
+    | x1::x2 -> f x1 (``5.4.11`` s f x2)
+let ``5.4.12.a`` l = ``5.4.11`` 0 (fun _ s -> s + 1) l
+let ``5.4.12.b`` l = ``5.4.11`` [[]] (fun x1 s -> (x1::(List.head s))::s) l
