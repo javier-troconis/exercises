@@ -407,3 +407,14 @@ let expr = Sub (
                 Sum (Cst 2, Let ("a", Cst 2, Var "a")),  
                 Var "a")
 evaluate expr env
+
+let rec sum_1 x y = if y = 0 then x else sum_1 (x + 1) (y - 1)
+let rec sum_2 x y = if y = 0 then x else 1 + sum_2 x (y - 1)
+let sum_3 x y = 
+    let rec sum_3 f y = 
+        if y = 0 then f 0 else sum_3 (fun z -> f (z + 1)) (y - 1)
+    sum_3 (fun z -> x + z) y
+
+sum_1 1 1000000
+sum_2 1 10000
+sum_3 1 1000000
