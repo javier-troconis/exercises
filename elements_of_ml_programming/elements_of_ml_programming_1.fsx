@@ -220,3 +220,11 @@ let rec ``5.4.11`` s f = function
     | x1::x2 -> f x1 (``5.4.11`` s f x2)
 let ``5.4.12.a`` l = ``5.4.11`` 0 (fun _ s -> s + 1) l
 let ``5.4.12.b`` l = ``5.4.11`` [[]] (fun x1 s -> (x1::(List.head s))::s) l
+let rec ``5.5.1`` l v =
+    match l with
+    | [] -> []
+    | x1::x2 -> x1 v::``5.5.1`` x2 v
+let ``5.5.2`` = List.map
+
+
+
