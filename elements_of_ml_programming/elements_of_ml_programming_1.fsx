@@ -43,7 +43,16 @@ let take (l, i) =
         else 
             f []
     take id (l, i)
-
+let map f = 
+    let rec map = function
+    | [] -> []
+    | x1::x2 -> f x1::map x2
+    map
+let filter f = 
+    let rec filter = function
+    | [] -> []
+    | x1::x2 -> if f x1 then x1::filter x2 else filter x2
+    filter
 //2.1.1.a 7
 //2.1.1.c 2
 //2.1.1.e false
@@ -225,6 +234,6 @@ let rec ``5.5.1`` l v =
     | [] -> []
     | x1::x2 -> x1 v::``5.5.1`` x2 v
 let ``5.5.2`` = List.map
-
-
+let ``5.5.7.a`` f = (fun x1 x2 -> f (x1, x2))
+let ``5.5.7.b`` f = (fun (x1, x2) -> f x1 x2)
 
