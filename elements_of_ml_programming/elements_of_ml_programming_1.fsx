@@ -53,6 +53,11 @@ let filter f =
     | [] -> []
     | x1::x2 -> if f x1 then x1::filter x2 else filter x2
     filter
+type BTree<'t> =
+    | Empty
+    | Node of 't * BTree<'t> * BTree<'t>
+type BTreeOfMap<'key,'value> = BTree<'key * 'value> 
+type Graph<'t> = ('t * 't list) list
 //2.1.1.a 7
 //2.1.1.c 2
 //2.1.1.e false
@@ -236,4 +241,33 @@ let rec ``5.5.1`` l v =
 let ``5.5.2`` = List.map
 let ``5.5.7.a`` f = (fun x1 x2 -> f (x1, x2))
 let ``5.5.7.b`` f = (fun (x1, x2) -> f x1 x2)
+let ``6.2.2`` = Node(("a", 1), Empty, Empty) : BTreeOfMap<string, int>
+let ``6.2.3`` = function
+    | Empty -> failwith "empty tree"
+    | Node (_, l, r) -> (l, r)
+//6.2.5.a datatype
+//6.2.5.c type
+//6.2.7
+type Graph1<'t> = Node1 of ('t * Graph1<'t>) list
+let ``6.2.7.b`` =
+    let rec find (a, g) =
+        match g with
+        | Node1 [] -> failwith "node not found"
+        | Node1 ((a1, g1)::x) -> if a = a1 then g1 else find (a, Node1 x) 
+    let rec flat = function
+        | Node1 [] -> []
+        | Node1 ((a1, g1)::x) -> a1::(flat g1)@(flat (Node1 x))
+    find >> flat
+let g = Node1 [(1, Node1 [(2, Node1 [(3, Node1 [])]); (4, Node1 [])]); (5, Node1 [])]
+``6.2.7.b`` (1, g)
+let rec ``6.2.7.c`` = function
+    | (_, Node1 []) -> []
+    | (a1, Node1 ((a2, g1)::x)) ->  if a1 = a2
+                                    then [a2]
+                                    else 
+                                        match ``6.2.7.c`` (a1, g1) with 
+                                            | [] -> ``6.2.7.c`` (a1, Node1 x)
+                                            | x1 -> a2::x1
+``6.2.7.c`` (5, g)                             
+
 
