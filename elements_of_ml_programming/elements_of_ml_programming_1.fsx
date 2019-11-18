@@ -57,7 +57,9 @@ type BTree<'t> =
     | Empty
     | Node of 't * BTree<'t> * BTree<'t>
 type BTreeOfMap<'key,'value> = BTree<'key * 'value> 
-type Graph<'t> = ('t * 't list) list
+let rec lookup = function
+    | (_, Empty) -> false
+    | (v, Node (x, l, r)) -> if x > v then lookup (v, l) else if v > x then lookup (v, r) else true
 //2.1.1.a 7
 //2.1.1.c 2
 //2.1.1.e false
