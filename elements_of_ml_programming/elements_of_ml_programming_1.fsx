@@ -59,7 +59,27 @@ type BTree<'t> =
 type BTreeOfMap<'key,'value> = BTree<'key * 'value> 
 let rec lookup = function
     | (_, Empty) -> false
-    | (v, Node (x, l, r)) -> if x > v then lookup (v, l) else if v > x then lookup (v, r) else true
+    | (v, Node (v1, l, r)) -> if v1 > v then lookup (v, l) else if v > v1 then lookup (v, r) else true
+let rec insert v = function
+    | Empty ->  Node (v, Empty, Empty)
+    | Node (v1, l, r) as n -> if v1 > v then Node (v1, insert v l, r) else if v > v1 then Node (v1, l, insert v r) else n
+let rec extract_min = function
+    | Empty -> failwith "empty node"
+    | Node (v, Empty, r) -> (v, r)
+    | Node(v, l, r) -> 
+        let (min, r1) = extract_min l
+        (min, Node (v, r1, r))
+let rec delete v = function
+    | Empty -> Empty
+    | Node (v1, l, r) -> 
+        if v1 > v then Node (v1, delete v l, r) else 
+        if v > v1 then Node (v1, l, delete v r) else 
+        match (l, r) with
+        | (Empty, r) -> r
+        | (l, Empty) -> l
+        | (l, r) -> 
+            let (min, r) = extract_min r
+            Node (min, l, r)
 //2.1.1.a 7
 //2.1.1.c 2
 //2.1.1.e false
