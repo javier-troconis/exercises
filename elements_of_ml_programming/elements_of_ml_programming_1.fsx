@@ -57,29 +57,32 @@ type BTree<'t> =
     | Empty
     | Node of 't * BTree<'t> * BTree<'t>
 type BTreeOfMap<'key,'value> = BTree<'key * 'value> 
-let rec lookup = function
+let rec btree_lookup = function
     | (_, Empty) -> false
-    | (v, Node (v1, l, r)) -> if v1 > v then lookup (v, l) else if v > v1 then lookup (v, r) else true
-let rec insert v = function
+    | (v, Node (v1, l, r)) -> if v1 > v then btree_lookup (v, l) else if v > v1 then btree_lookup (v, r) else true
+let rec btree_insert v = function
     | Empty ->  Node (v, Empty, Empty)
-    | Node (v1, l, r) as n -> if v1 > v then Node (v1, insert v l, r) else if v > v1 then Node (v1, l, insert v r) else n
-let rec extract_min = function
+    | Node (v1, l, r) as n -> if v1 > v then Node (v1, btree_insert v l, r) else if v > v1 then Node (v1, l, btree_insert v r) else n
+let rec btree_extract_min_node = function
     | Empty -> failwith "empty node"
     | Node (v, Empty, r) -> (v, r)
     | Node(v, l, r) -> 
-        let (min, r1) = extract_min l
-        (min, Node (v, r1, r))
-let rec delete v = function
+        let (min, r1) = btree_extract_min_node l
+        (min, Node (v, r1, r))    
+let rec btree_delete v = function
     | Empty -> Empty
     | Node (v1, l, r) -> 
-        if v1 > v then Node (v1, delete v l, r) else 
-        if v > v1 then Node (v1, l, delete v r) else 
+        if v1 > v then Node (v1, btree_delete v l, r) else 
+        if v > v1 then Node (v1, l, btree_delete v r) else 
         match (l, r) with
         | (Empty, r) -> r
         | (l, Empty) -> l
         | (l, r) -> 
-            let (min, r) = extract_min r
+            let (min, r) = btree_extract_min_node r
             Node (min, l, r)
+
+
+
 //2.1.1.a 7
 //2.1.1.c 2
 //2.1.1.e false
@@ -290,6 +293,10 @@ let rec ``6.2.7.c`` = function
                                         match ``6.2.7.c`` (a1, g1) with 
                                             | [] -> ``6.2.7.c`` (a1, Node1 x)
                                             | x1 -> a2::x1
-``6.2.7.c`` (5, g)                             
+let rec ``6.3.2.a`` lt a = function
+    | Empty -> failwith "not found"
+    | Node ((a1, b), l, r) -> if lt (a, a1) then ``6.3.2.a`` lt a l else if lt (a1, a) then ``6.3.2.a`` lt a r else b
+
+
 
 
