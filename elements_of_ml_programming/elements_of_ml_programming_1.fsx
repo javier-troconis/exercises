@@ -80,7 +80,10 @@ let rec btree_delete v = function
         | (l, r) -> 
             let (min, r) = btree_extract_min_node r
             Node (min, l, r)
-
+type GTree<'t> = Node of 't *  GTree<'t> list
+let rec gtree_sum_of_nodes = function
+    | Node (v, []) -> v
+    | Node (v1, x1::x2) -> gtree_sum_of_nodes x1 + gtree_sum_of_nodes (Node (v1, x2))
 
 
 //2.1.1.a 7
@@ -295,7 +298,14 @@ let rec ``6.2.7.c`` = function
                                             | x1 -> a2::x1
 let rec ``6.3.2.a`` lt a = function
     | Empty -> failwith "not found"
-    | Node ((a1, b), l, r) -> if lt (a, a1) then ``6.3.2.a`` lt a l else if lt (a1, a) then ``6.3.2.a`` lt a r else b
+    | Node ((a1, b), l, r) -> 
+        if lt (a, a1) 
+        then ``6.3.2.a`` lt a l 
+        else if lt (a1, a) 
+        then ``6.3.2.a`` lt a r 
+        else b
+
+
 
 
 
