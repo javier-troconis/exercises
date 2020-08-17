@@ -418,3 +418,54 @@ let sum_3 x y =
 sum_1 1 1000000
 sum_2 1 10000
 sum_3 1 1000000
+
+let rec fib x =
+    if x = 0 || x = 1 then x else fib (x - 2) + fib (x - 1)
+    
+let mutable map = Map.empty
+let memoize f = 
+
+    (fun x -> match map.TryFind x with 
+                | Some x -> x 
+                | None -> 
+                    map <- Map.add x (f x) map
+                    map.[x])
+let fib1 = memoize fib
+
+fib1 56
+
+let rec split = function
+    | [] -> ([], [])
+    | [x1] -> ([x1], [])
+    | x1::x2::x3 -> let (x4, x5) = split x3
+                    (x1::x4, x2::x5)
+
+let rec sort = function 
+    | (x1::x2, x3::x4) -> if x1 > x3 then x3::sort(x1::x2, x4) else x1::sort(x2, x3::x4)
+    | (x1, []) -> x1
+    | ([], x1) -> x1
+
+let rec merge_sort = function
+    | [] -> []
+    | [x1] -> [x1]
+    | x1 -> 
+        let (x2, x3) = split x1
+        let x4 = merge_sort x2
+        let x5 = merge_sort x3
+        sort (x4, x5)
+
+merge_sort [4]
+
+let rec sum_cps n f = 
+    if n > 0 then sum_cps (n - 1) (fun n1 -> f (n + n1)) 
+    else f n
+
+sum_cps 3 id
+
+let rec sum_cps_1 f = function 
+    | [] -> f 0
+    | x1::x2 -> sum_cps_1 (fun x3 -> f (x1 + x3)) x2
+
+sum_cps_1 id [1..3]
+
+
