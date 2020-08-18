@@ -114,3 +114,13 @@ let rec ``3.3.11.b`` x1 = function
 let rec ``3.3.11.c`` x1 = function
     | [] -> [x1]
     | x2::x3 as x4 -> if x1 <> x2 then x2::``3.3.11.c`` x1 x3 else x4
+let rec ``3.3.12`` a = function
+    | [] -> []
+    | x1::x2 -> (a::x1)::``3.3.12`` a x2
+let rec ``3.3.13`` = function
+    | [] -> [[]]
+    | x1::x2 -> 
+        let x3 = ``3.3.13`` x2
+        ``3.3.12`` x1 x3 @ x3
+
+        
