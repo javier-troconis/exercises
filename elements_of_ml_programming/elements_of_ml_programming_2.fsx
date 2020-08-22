@@ -162,9 +162,10 @@ let rec ``3.3.14`` = function
     | x1::x2 -> ``3.3.14.1`` x1 x2 * ``3.3.14`` x2
     | [] -> 1.0
 let ``3.4.1`` x = 
-    let x = x * x * x * x * x * x * x * x * x * x
-    let x = x * x * x * x * x * x * x * x * x * x
-    x * x * x * x * x * x * x * x * x * x
+    let x = x * x * x * x * x
+    let x = x * x * x * x * x
+    let x = x * x * x * x * x
+    x * x * x * x * x * x * x * x
 let ``3.4.2`` = split
 let ``3.4.3`` = ``3.3.13``
 let ``3.4.4`` = ``3.2.1.f``
@@ -181,3 +182,11 @@ let rec ``3.4.7`` = function
     | x1::x2::x3 -> 
         let (x4,x5) = ``3.4.7`` x3
         (x2 + x4, x1 + x5)
+let rec ``3.5.1`` = function
+    | ([], x1) -> x1
+    | (x1::x2, x3) -> x1::``3.5.1`` (x2,x3)
+let ``3.5.1.cps`` (x1,x2) =
+    let rec ``3.5.1.cps`` f = function
+        | ([], x1) -> f x1
+        | (x1::x2, x3) -> ``3.5.1.cps`` (fun x4 -> f (x1::x4)) (x2,x3)
+    ``3.5.1.cps`` id (x1,x2)
