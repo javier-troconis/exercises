@@ -12,7 +12,7 @@ let rec take = function
     and
     skip = function
     | [] -> []
-    | x1::x2 -> take x2
+    | _::x2 -> take x2
 
 let rec merge = function
     | (x1, []) -> x1
@@ -21,10 +21,43 @@ let rec merge = function
         if x1 > x4 then x4 :: merge (x3, x5) 
         else x1 :: merge (x2, x6)
 
-let rec sumList = function
+let rec sum_list = function
     | [] -> 0
-    | []::x3 -> sumList x3    
-    | (x1::x2)::x3 -> x1 + sumList (x2::x3)
+    | []::x3 -> sum_list x3    
+    | (x1::x2)::x3 -> x1 + sum_list (x2::x3)
+
+let rec split = function
+    | x1::x2::x3 -> 
+        let (x4,x5) = split x3
+        (x1::x4, x2::x5)
+    | [x1] -> ([x1], [])
+    | [] -> ([],[])
+
+let rec merge_sort = function
+    | [] -> []
+    | [x1] -> [x1]
+    | x1 -> 
+        let (x2,x3) = split x1
+        merge (merge_sort x2, merge_sort x3) 
+
+let reverse_no_backtracking x1 = 
+    let rec reverse_no_backtracking r = function
+        | [] -> r
+        | x1::x2 -> reverse_no_backtracking (x1::r) x2
+    reverse_no_backtracking [] x1
+
+let rec fold_right f l s =
+    match l with
+    | [] -> s
+    | x1::x2 -> f x1 (fold_right f x2 s)
+
+let fold_right_cps f l s =
+    let rec foldright_cps f1 l s =
+        match l with
+        | [] -> f1 s
+        | x1::x2 -> foldright_cps (fun x3 -> f1 (f x1 x3)) x2 s
+    foldright_cps id l s
+
 
 //2.1.1.a 7
 //2.1.1.c 2
@@ -124,8 +157,27 @@ let rec ``3.3.13`` = function
         ``3.3.12`` x1 x3 @ x3
 let rec ``3.3.14.1`` x1 = function
     | x2::x3 -> x1 - x2 * ``3.3.14.1`` x1 x3
-    | _ -> 1.0
+    | [] -> 1.0
 let rec ``3.3.14`` = function
     | x1::x2 -> ``3.3.14.1`` x1 x2 * ``3.3.14`` x2
-    | _ -> 1.0
-
+    | [] -> 1.0
+let ``3.4.1`` x = 
+    let x = x * x * x * x * x * x * x * x * x * x
+    let x = x * x * x * x * x * x * x * x * x * x
+    x * x * x * x * x * x * x * x * x * x
+let ``3.4.2`` = split
+let ``3.4.3`` = ``3.3.13``
+let ``3.4.4`` = ``3.2.1.f``
+let rec ``3.4.5`` (x,i) =
+    if i > 0 then x * x * ``3.4.5`` (x,i-1) else 1
+let rec ``3.4.6`` = function
+    | [] -> (0,0)
+    | (x1,x2)::x3 -> 
+        let (x4,x5) = ``3.4.6`` x3
+        (x1 + x4, x2 + x5)
+let rec ``3.4.7`` = function
+    | [] -> (0,0)
+    | [x1] -> (0,x1)
+    | x1::x2::x3 -> 
+        let (x4,x5) = ``3.4.7`` x3
+        (x2 + x4, x1 + x5)
