@@ -257,5 +257,13 @@ let ``3.5.2`` (l,i) =
                     x4
     concat (``3.5.2`` (i % (length l)) (l, []))
  
-//4.1.5 yes
+//4.1.5 no
+
+let ``4.1.3`` n =
+    let rec ``4.1.3`` (n,r) =
+        if n > 0 then 
+            ``4.1.3`` (n-1, r + r)
+        else
+            printfn "%s" r
+    ``4.1.3`` (n,"X")
 
