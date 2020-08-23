@@ -247,14 +247,15 @@ let ``3.5.1.cps`` (x1,x2) =
     ``3.5.1.cps`` id (x1,x2)
 
 let ``3.5.2`` (l,i) =
-    let rec ``3.5.2`` (i, r) = 
-        if i > 0 then
-            match r with 
-            | ([],_) -> ([],[])
-            | (x1::x2, x3) -> 
-                let (x4,x5) = ``3.5.2`` (i-1, (x2, x3))
-                (x4, x1::x5)
-        else
-            r
-    concat (``3.5.2`` (i % (length l), (l, [])))
+    let rec ``3.5.2`` i = function
+        | ([],_) as x1 -> x1
+        | (x1::x2, x3) as x4 -> 
+                if i > 0 then
+                    let (x4,x5) = ``3.5.2`` (i-1) (x2, x3)
+                    (x4, x1::x5)
+                else
+                    x4
+    concat (``3.5.2`` (i % (length l)) (l, []))
+ 
+//4.1.5 yes
 
