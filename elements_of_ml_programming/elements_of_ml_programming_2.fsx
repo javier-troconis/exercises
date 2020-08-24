@@ -58,6 +58,12 @@ let fold_right_cps f l s =
         | x1::x2 -> foldright_cps (fun x3 -> f1 (f x1 x3)) x2 s
     foldright_cps id l s
 
+let rec pow a = function
+  | 0 -> 1
+  | 1 -> a
+  | n -> 
+    let b = pow a (n / 2) in
+    b * b * (if n % 2 = 0 then 1 else a)
 
 //2.1.1.a 7
 
@@ -267,3 +273,23 @@ let ``4.1.3`` n =
             printfn "%s" r
     ``4.1.3`` (n,"X")
 
+//4.1.4 ?
+
+//4.2.3.a unit option
+
+//4.2.3.b int option
+
+//4.2.3.c option option
+
+//4.2.3.d unit -> bool option
+
+//4.2.3.e option -> int
+
+//4.2.5 ?
+
+let rec ``4.3.2`` i b =
+    if b > i then sprintf "%i" i
+    else ``4.3.2`` (i / b) b +
+            let r = i % b
+            sprintf (if r > 10 then "(%i)" else "%i") r      
+                
